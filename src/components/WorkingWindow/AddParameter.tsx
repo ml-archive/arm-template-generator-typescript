@@ -43,7 +43,10 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             state.maxLength = props.parameter.maxLength;
             state.minValue = props.parameter.minValue;
             state.maxValue = props.parameter.maxValue;
-            state.description = props.parameter.metadata.description;
+            if(props.parameter.metadata) {
+                state.description = props.parameter.metadata.description;
+            }
+            
             state.setDefaultValue = props.parameter.defaultValue !== undefined && props.parameter.defaultValue !== null;
         } else {
             state.defaultValue = "";
@@ -165,7 +168,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             <form onSubmit={this.submitForm}>
                 <label htmlFor="parameter-name">Name</label>
                 <div className="input-group">
-                    <input type="text" className="form-control" required id="parameter-name" value={this.state.name} onChange={this.setName} />
+                    <input type="text" className="form-control" required id="parameter-name" readOnly={this.props.name !== null && this.props.name !== undefined && this.props.name !== ""} value={this.state.name} onChange={this.setName} />
                 </div>
 
                 <label htmlFor="parameter-type">Type</label>

@@ -6,7 +6,6 @@ import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
-import { number } from "prop-types";
 
 export interface MainProps {}
 
@@ -72,6 +71,10 @@ export class Main extends Component<MainProps, MainState> {
         this.setState({
             template: template
         });
+
+        if(key && this.state.editKey === key) {
+            this.closeWindow();
+        }
     }
 
     onOpenWindow(windowToOpen: Windows, key?: string): void {

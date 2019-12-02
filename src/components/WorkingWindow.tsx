@@ -59,6 +59,7 @@ export class WorkingWindow extends Component<WorkingWindowProps> {
         return (<Fragment>
                 <h2>{headline}</h2>
                 {this.props.window === Windows.AddParameter && <AddParameter parameter={null} onSubmit={this.props.onAddParameter}></AddParameter> }
+                {this.props.window === Windows.EditParameter && <AddParameter parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></AddParameter>}
             </Fragment>)
     }
 }
