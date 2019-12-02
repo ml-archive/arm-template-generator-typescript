@@ -2,9 +2,11 @@ import * as React from "react";
 import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
+import { Windows } from "./WorkingWindow";
 
 export interface MenuProps {
     template: ArmTemplate;
+    openWindow: (window: Windows, key?: string) => void
 }
 
 enum MenuOption {
@@ -64,6 +66,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             activeGroup: MenuOption.Parameters,
             activeKey: null
         });
+
+        this.props.openWindow(Windows.AddParameter);
     }
 
     onAddVariable() {
@@ -71,6 +75,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             activeGroup: MenuOption.Variables,
             activeKey: null
         });
+
+        this.props.openWindow(Windows.AddVariable);
     }
 
     onAddResource() {
@@ -78,6 +84,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             activeGroup: MenuOption.Resources,
             activeKey: null
         });
+
+        this.props.openWindow(Windows.AddResource);
     }
 
     onAddOutput() {
@@ -85,6 +93,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             activeGroup: MenuOption.Outputs,
             activeKey: null
         });
+
+        this.props.openWindow(Windows.AddOutput);
     }
 
     onEditParameter(parameterName: string) {
@@ -92,6 +102,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             activeGroup: MenuOption.Parameters,
             activeKey: parameterName
         });
+
+        this.props.openWindow(Windows.EditParameter, parameterName);
     }
 
     renderParameter(parameterName: string) {

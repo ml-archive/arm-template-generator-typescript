@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from 'react'
 import Menu from "./Menu";
-import WorkingWindow from "./WorkingWindow";
+import WorkingWindow, { Windows } from "./WorkingWindow";
 import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
@@ -10,6 +10,8 @@ export interface MainProps {}
 
 export interface MainState {
     template: ArmTemplate;
+    window: Windows,
+    editKey?: string
 }
 
 export class Main extends Component<MainProps, MainState> {
@@ -17,10 +19,20 @@ export class Main extends Component<MainProps, MainState> {
         super(props);
 
         this.onAddParameter = this.onAddParameter.bind(this);
+        this.closeWindow = this.closeWindow.bind(this);
+        this.onOpenWindow = this.onOpenWindow.bind(this);
 
         this.state = {
-            template: new ArmTemplate()
+            template: new ArmTemplate(),
+            window: Windows.None
         };
+    }
+
+    closeWindow(): void {
+        this.setState({
+            window: Windows.None,
+            editKey: null
+        });
     }
 
     onAddParameter(parameter: Parameter, name: string): void {
@@ -31,6 +43,15 @@ export class Main extends Component<MainProps, MainState> {
         this.setState({
             template: template
         });
+
+        this.closeWindow();
+    }
+
+    onOpenWindow(windowToOpen: Windows, key?: string):void {
+        this.setState({
+            window: windowToOpen,
+            editKey: key
+        });
     }
 
     render() {
@@ -38,10 +59,10 @@ export class Main extends Component<MainProps, MainState> {
             <h1>Welcome</h1>
             <div className="row">
                 <div className="col-md">
-                    <Menu template={this.state.template} />
+                    <Menu openWindow={this.onOpenWindow} template={this.state.template}  />
                 </div>
                 <div className="col-md-6">
-                    <WorkingWindow template={this.state.template} onAddParameter={this.onAddParameter} />
+                    <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onAddParameter={this.onAddParameter} />
                 </div>
                 <div className="col-md">
                     <TemplateViewer template={this.state.template} />

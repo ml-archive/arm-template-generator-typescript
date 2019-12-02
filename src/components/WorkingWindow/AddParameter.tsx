@@ -19,12 +19,14 @@ class AddParameterState {
     maxValue?: number;
     allowedValues: any[];
     description: string;
+    setDefaultValue: boolean;
 }
 
 export class AddParameter extends Component<AddParameterProps, AddParameterState> {
     constructor(props: AddParameterProps) {
         super(props);
 
+        this.onSetDefaultValue = this.onSetDefaultValue.bind(this);
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
@@ -41,8 +43,10 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             state.minValue = props.parameter.minValue;
             state.maxValue = props.parameter.maxValue;
             state.description = props.parameter.metadata.description;
+            state.setDefaultValue = props.parameter.defaultValue !== undefined && props.parameter.defaultValue !== null;
         } else {
             state.defaultValue = "";
+            state.setDefaultValue = false;
         }
 
         if(props.name) {
@@ -54,9 +58,22 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         this.state = state;
     }
 
+    onSetDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
+        if(event.currentTarget.checked === false) {
+            this.setState({
+                setDefaultValue: event.currentTarget.checked,
+                defaultValue: ""
+            });
+        } else {
+            this.setState({
+                setDefaultValue: event.currentTarget.checked
+            });
+        }
+    }
+
     setDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
-            defaultValue: event.currentTarget.value
+            defaultValue: this.state.type === "int" ? Number(event.currentTarget.value) : event.currentTarget.value
         });
     }
 
@@ -138,12 +155,22 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
                     <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
                 </div>
 
-                <label htmlFor="parameter-default-value">Default value</label>
                 <div className="input-group">
-                    {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
+                    <label htmlFor="parameter-set-default">
+                        <input type="checkbox" id="parameter-set-default" checked={this.state.setDefaultValue} onChange={this.onSetDefaultValue} /> Set default value?
+                    </label>
                 </div>
 
-                <button type="submit" className="btn btn-primary">Save</button>
+                {this.state.setDefaultValue && 
+                <Fragment><label htmlFor="parameter-default-value">Default value</label>
+                    <div className="input-group">
+                        {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
+                    </div>
+                </Fragment>}
+
+                <div className="input-group">
+                    <button type="submit" className="btn btn-primary">Save</button>
+                </div>
 
                 <h3>JSON value (to be deleted)</h3>
                 <p>{json}</p>
