@@ -22,12 +22,27 @@ export class Menu extends Component<MenuProps, MenuState> {
         super(props);
 
         this.onAddParameter = this.onAddParameter.bind(this);
+        this.onAddVariable = this.onAddVariable.bind(this);
+        this.onAddResource = this.onAddResource.bind(this);
+        this.onAddOutput = this.onAddOutput.bind(this);
 
         this.state = new MenuState();
     }
 
     onAddParameter() {
         this.setState({activeGroup: MenuOption.Parameters});
+    }
+
+    onAddVariable() {
+        this.setState({activeGroup: MenuOption.Variables});
+    }
+
+    onAddResource() {
+        this.setState({activeGroup: MenuOption.Resources});
+    }
+
+    onAddOutput() {
+        this.setState({activeGroup: MenuOption.Outputs});
     }
 
     render() {
@@ -60,15 +75,18 @@ export class Menu extends Component<MenuProps, MenuState> {
                 </li>
 
                 <li className={variablesMenuClass}>
-                    Variables
+                    <span>Variables <a href="#" onClick={() => this.onAddVariable()}>Add</a></span>
+                    <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.variables).length}</span>
                 </li>
 
                 <li className={resourcesMenuClass}>
-                    Resources
+                    <span>Resources <a href="#" onClick={() => this.onAddResource()}>Add</a></span>
+                    <span className="badge badge-danger badge-pill">{this.props.template.resources.length}</span>
                 </li>
 
                 <li className={outputsMenuClass}>
-                    Outputs
+                    <span>Outputs <a href="#" onClick={() => this.onAddOutput()}>Add</a></span>
+                    <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.outputs).length}</span>
                 </li>
             </ul>
             </div>)
