@@ -5,6 +5,12 @@
                 color: $white;
             }
         }
+
+        a {
+            + a {
+                padding-left: 30px;
+            }
+        }
     }
 }
 

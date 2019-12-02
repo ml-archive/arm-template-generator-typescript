@@ -3,10 +3,12 @@ import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import { Windows } from "./WorkingWindow";
+import EntryTypes from "../models/EntryTypes";
 
 export interface MenuProps {
     template: ArmTemplate;
-    openWindow: (window: Windows, key?: string) => void
+    openWindow: (window: Windows, key?: string) => void,
+    deleteEntry: (entryType: EntryTypes, key: string) => void
 }
 
 enum MenuOption {
@@ -33,6 +35,8 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.onAddVariable = this.onAddVariable.bind(this);
         this.onAddResource = this.onAddResource.bind(this);
         this.onAddOutput = this.onAddOutput.bind(this);
+
+        this.onDeleteParameter = this.onDeleteParameter.bind(this);
 
         this.onEditParameter = this.onEditParameter.bind(this);
 
@@ -97,6 +101,12 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.props.openWindow(Windows.AddOutput);
     }
 
+    onDeleteParameter(parameterName: string) {
+        if(window.confirm('Are you sure you want to delete ' + parameterName + '?')) {
+            this.props.deleteEntry(EntryTypes.Parameter, parameterName);
+        }
+    }
+
     onEditParameter(parameterName: string) {
         this.setState({
             activeGroup: MenuOption.Parameters,
@@ -112,7 +122,8 @@ export class Menu extends Component<MenuProps, MenuState> {
             className += " active";
 
         return <li key={parameterName} className={className}>
-            {parameterName} <a href="#" onClick={() => this.onEditParameter(parameterName)}>Edit</a>
+            {parameterName} <span><a href="#" onClick={() => this.onEditParameter(parameterName)}>Edit</a>
+            <a href="#" onClick={() => this.onDeleteParameter(parameterName)}>Delete</a></span>
         </li>
     }
 
