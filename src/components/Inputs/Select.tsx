@@ -17,7 +17,7 @@ export class Select extends Component<SelectProps, SelectState> {
     render() {
         return (<select>
             {this.props.values.map((value) => {
-                return <option>{value}</option>;
+                return <option key={value}>{value}</option>;
             })};
         </select>)
     }

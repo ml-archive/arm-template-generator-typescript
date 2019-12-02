@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp sass && npx webpack"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,11 @@
     "@types/bootstrap": "^4.3.1",
     "@types/react": "^16.9.13",
     "@types/react-dom": "^16.9.4",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "node-sass": "^4.13.0",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
