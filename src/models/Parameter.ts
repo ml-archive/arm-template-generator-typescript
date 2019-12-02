@@ -3,6 +3,8 @@ export class Parameter {
     defaultValue: any;
     minLength: number;
     maxLength: number;
+    minValue: number;
+    maxValue: number;
     allowedValues: any[];
     metadata: ParameterMetadata;
 }
