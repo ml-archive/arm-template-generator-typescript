@@ -17,11 +17,14 @@ export class TemplateViewer extends Component<TemplateViewerProps> {
 
     render() {
         const json = JSON.stringify(this.Template);
+        const style = {
+            height: "500px"
+        };
 
         return (<div>
             <h2>Template viewer</h2>
 
-            <textarea className="form-control" readOnly>{json}</textarea>
+            <textarea className="form-control" readOnly value={json} style={style}></textarea>
             </div>)
     }
 }
