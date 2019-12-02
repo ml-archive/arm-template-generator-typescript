@@ -24,6 +24,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     constructor(props: AddParameterProps) {
         super(props);
 
+        this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
 
@@ -38,6 +39,8 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             state.minValue = props.parameter.minValue;
             state.maxValue = props.parameter.maxValue;
             state.description = props.parameter.metadata.description;
+        } else {
+            state.defaultValue = "";
         }
 
         if(props.name) {
@@ -47,6 +50,12 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         }
 
         this.state = state;
+    }
+
+    setDefaultValue(event: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            defaultValue: event.currentTarget.value
+        });
     }
 
     setName(event: ChangeEvent<HTMLInputElement>) {
@@ -63,6 +72,20 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
 
     render() {
         const json = JSON.stringify(this.state);
+        let defaultValueType: string;
+
+        switch(this.state.type) {
+            case "string":
+            case "securestring":
+            case "object":
+            case "secureObject":
+            case "array":
+                defaultValueType = "text";
+                break;
+            case "int":
+                defaultValueType = "number";
+                break;
+        }
 
         return (
         <Fragment>
@@ -74,6 +97,11 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             <label htmlFor="parameter-type">Type</label>
             <div className="input-group">
                 <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
+            </div>
+
+            <label htmlFor="parameter-default-value">Default value</label>
+            <div className="input-group">
+                {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
             </div>
 
             <h3>JSON value (to be deleted)</h3>
