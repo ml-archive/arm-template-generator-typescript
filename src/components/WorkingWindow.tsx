@@ -7,12 +7,8 @@ export interface WorkingWindowProps {
 }
 
 export class WorkingWindow extends Component<WorkingWindowProps> {
-    Template: ArmTemplate;
-
     constructor(props: WorkingWindowProps) {
         super(props);
-
-        this.Template = props.Template;
     }
 
     render() {

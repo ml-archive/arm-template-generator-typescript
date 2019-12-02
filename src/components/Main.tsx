@@ -25,7 +25,7 @@ export class Main extends Component<MainProps, MainState> {
             <h1>Welcome</h1>
             <div className="row">
                 <div className="col-md">
-                    <Menu Template={this.state.template} />
+                    <Menu template={this.state.template} />
                 </div>
                 <div className="col-md-6">
                     <WorkingWindow Template={this.state.template} />

@@ -7,16 +7,12 @@ export interface TemplateViewerProps {
 }
 
 export class TemplateViewer extends Component<TemplateViewerProps> {
-    Template: ArmTemplate;
-
     constructor(props: TemplateViewerProps) {
         super(props);
-
-        this.Template = props.Template;
     }
 
     render() {
-        const json = JSON.stringify(this.Template, (_key, value) => { if(value !== null) return value;}, 2);
+        const json = JSON.stringify(this.props.Template, (_key, value) => { if(value !== null) return value;}, 2);
         const style = {
             height: "500px"
         };
