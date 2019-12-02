@@ -1,4 +1,4 @@
-import { Component, Fragment } from "react";
+import { Component, Fragment, ChangeEvent } from "react";
 import React = require("react");
 import Select from "../Inputs/Select";
 import Parameter from "../../models/Parameter";
@@ -24,6 +24,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     constructor(props: AddParameterProps) {
         super(props);
 
+        this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
 
         let state = new AddParameterState();
@@ -41,9 +42,17 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
 
         if(props.name) {
             state.name = props.name;
+        } else {
+            state.name = "";
         }
 
         this.state = state;
+    }
+
+    setName(event: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            name: event.currentTarget.value
+        });
     }
 
     setType(type: string) {
@@ -55,15 +64,16 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     render() {
         const json = JSON.stringify(this.state);
 
-        const allowedTypeValues = ["bool", "string", "securestring", "int", "object", "secureObject", "array"];
-
         return (
         <Fragment>
-            <label htmlFor="parameter-name"></label>
+            <label htmlFor="parameter-name">Name</label>
+            <div className="input-group">
+                <input type="text" className="form-control" required id="parameter-name" value={this.state.name} onChange={this.setName} />
+            </div>
 
             <label htmlFor="parameter-type">Type</label>
             <div className="input-group">
-                <Select id="parameter-type" values={allowedTypeValues} onOptionSelect={this.setType} value={this.state.type}></Select>
+                <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
             </div>
 
             <h3>JSON value (to be deleted)</h3>

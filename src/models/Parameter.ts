@@ -7,6 +7,8 @@ export class Parameter {
     maxValue: number;
     allowedValues: any[];
     metadata: ParameterMetadata;
+
+    static allowedTypes: string[] = ["bool", "string", "securestring", "int", "object", "secureObject", "array"];
 }
 
 export class ParameterMetadata {
