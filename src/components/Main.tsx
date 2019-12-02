@@ -6,6 +6,7 @@ import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
+import { number } from "prop-types";
 
 export interface MainProps {}
 
@@ -54,6 +55,18 @@ export class Main extends Component<MainProps, MainState> {
 
         if(entryType === EntryTypes.Parameter) {
             delete(template.parameters[key]);
+        }
+
+        if(entryType === EntryTypes.Variable) {
+            delete(template.variables[key]);
+        }
+
+        if(entryType === EntryTypes.Output) {
+            delete(template.outputs[key]);
+        }
+
+        if(entryType === EntryTypes.Resource) {
+            delete(template.resources[Number(key)]);
         }
 
         this.setState({
