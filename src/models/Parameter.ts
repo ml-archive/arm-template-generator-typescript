@@ -10,3 +10,5 @@ export class Parameter {
 export class ParameterMetadata {
     description: string;
 }
+
+export default Parameter;

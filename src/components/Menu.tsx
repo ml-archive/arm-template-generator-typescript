@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Component } from 'react'
+import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
+import Parameter from "../models/Parameter";
 
 export interface MenuProps {
     template: ArmTemplate;
@@ -14,7 +15,12 @@ enum MenuOption {
 }
 
 class MenuState {
-    activeGroup: MenuOption
+    activeGroup: MenuOption;
+    activeKey: string;
+    parameterCount: number;
+    variableCount: number;
+    resourceCount: number;
+    outputCount: number;
 }
 
 export class Menu extends Component<MenuProps, MenuState> {
@@ -26,23 +32,87 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.onAddResource = this.onAddResource.bind(this);
         this.onAddOutput = this.onAddOutput.bind(this);
 
+        this.onEditParameter = this.onEditParameter.bind(this);
+
+        this.renderParameters = this.renderParameters.bind(this);
+        this.renderParameter = this.renderParameter.bind(this);
+
         this.state = new MenuState();
     }
 
+    componentDidUpdate(nextProps: MenuProps) {
+        let parameterCount = Object.keys(nextProps.template.parameters).length;
+        let variableCount = Object.keys(nextProps.template.variables).length;
+        let resourceCount = nextProps.template.resources.length;
+        let outputCount = Object.keys(nextProps.template.outputs).length;
+
+        if(parameterCount != this.state.parameterCount
+            || variableCount != this.state.variableCount
+            || resourceCount != this.state.resourceCount
+            || outputCount != this.state.outputCount) {
+            this.setState({
+                parameterCount: Object.keys(nextProps.template.parameters).length,
+                variableCount: Object.keys(nextProps.template.variables).length,
+                resourceCount: nextProps.template.resources.length,
+                outputCount: Object.keys(nextProps.template.outputs).length
+            });
+        }
+    }
+
     onAddParameter() {
-        this.setState({activeGroup: MenuOption.Parameters});
+        this.setState({
+            activeGroup: MenuOption.Parameters,
+            activeKey: null
+        });
     }
 
     onAddVariable() {
-        this.setState({activeGroup: MenuOption.Variables});
+        this.setState({
+            activeGroup: MenuOption.Variables,
+            activeKey: null
+        });
     }
 
     onAddResource() {
-        this.setState({activeGroup: MenuOption.Resources});
+        this.setState({
+            activeGroup: MenuOption.Resources,
+            activeKey: null
+        });
     }
 
     onAddOutput() {
-        this.setState({activeGroup: MenuOption.Outputs});
+        this.setState({
+            activeGroup: MenuOption.Outputs,
+            activeKey: null
+        });
+    }
+
+    onEditParameter(parameterName: string) {
+        this.setState({
+            activeGroup: MenuOption.Parameters,
+            activeKey: parameterName
+        });
+    }
+
+    renderParameter(parameterName: string) {
+        let className = "list-group-item sub-item d-flex justify-content-between"
+        if(this.state.activeKey === parameterName)
+            className += " active";
+
+        return <li key={parameterName} className={className}>
+            {parameterName} <a href="#" onClick={() => this.onEditParameter(parameterName)}>Edit</a>
+        </li>
+    }
+
+    renderParameters(parameters: { [index: string]: Parameter }) {
+        if(this.state.parameterCount <= 0)
+            return null;
+
+        return (<Fragment>
+            {Object.keys(parameters).map((key) => {
+                return this.renderParameter(key);
+            })}
+            </Fragment>)
     }
 
     render() {
@@ -65,7 +135,7 @@ export class Menu extends Component<MenuProps, MenuState> {
         else if(this.state.activeGroup == MenuOption.Outputs)
             outputsMenuClass += " active";
 
-        return (<div>
+        return (<Fragment>
             <h2>Menu</h2>
 
             <ul className="list-group">
@@ -73,6 +143,8 @@ export class Menu extends Component<MenuProps, MenuState> {
                     <span>Parameters <a href="#" onClick={() => this.onAddParameter()}>Add</a></span>
                     <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.parameters).length}</span>
                 </li>
+                
+                {this.renderParameters(this.props.template.parameters)}
 
                 <li className={variablesMenuClass}>
                     <span>Variables <a href="#" onClick={() => this.onAddVariable()}>Add</a></span>
@@ -89,7 +161,7 @@ export class Menu extends Component<MenuProps, MenuState> {
                     <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.outputs).length}</span>
                 </li>
             </ul>
-            </div>)
+            </Fragment>)
     }
 }
 
