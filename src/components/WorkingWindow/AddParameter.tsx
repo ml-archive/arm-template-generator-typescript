@@ -59,8 +59,11 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
 
         return (
         <Fragment>
+            <label htmlFor="parameter-name"></label>
+
+            <label htmlFor="parameter-type">Type</label>
             <div className="input-group">
-                <Select values={allowedTypeValues} onOptionSelect={this.setType}></Select>
+                <Select id="parameter-type" values={allowedTypeValues} onOptionSelect={this.setType} value={this.state.type}></Select>
             </div>
 
             <h3>JSON value (to be deleted)</h3>
