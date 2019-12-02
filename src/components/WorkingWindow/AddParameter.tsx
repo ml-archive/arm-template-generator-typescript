@@ -6,16 +6,17 @@ import Parameter from "../../models/Parameter";
 export interface AddParameterProps {
     parameter?: Parameter;
     name?: string;
+    onSubmit: (savedParameter: Parameter, parameterName: string) => void;
 }
 
 class AddParameterState {
     name: string;
     type: string;
     defaultValue: any;
-    minLength: number;
-    maxLength: number;
-    minValue: number;
-    maxValue: number;
+    minLength?: number;
+    maxLength?: number;
+    minValue?: number;
+    maxValue?: number;
     allowedValues: any[];
     description: string;
 }
@@ -27,6 +28,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
+        this.submitForm = this.submitForm.bind(this);
 
         let state = new AddParameterState();
 
@@ -52,22 +54,58 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         this.state = state;
     }
 
-    setDefaultValue(event: ChangeEvent<HTMLInputElement>) {
+    setDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             defaultValue: event.currentTarget.value
         });
     }
 
-    setName(event: ChangeEvent<HTMLInputElement>) {
+    setName(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             name: event.currentTarget.value
         });
     }
 
-    setType(type: string) {
+    setType(type: string): void {
         this.setState({
             type: type
         });
+    }
+
+    submitForm(): void {
+        let parameter = new Parameter();
+
+        if(this.state.defaultValue) {
+            parameter.defaultValue = this.state.defaultValue;
+        }
+
+        if(this.state.allowedValues) {
+            parameter.allowedValues = this.state.allowedValues;
+        }
+
+        if(this.state.description) {
+            parameter.metadata.description = this.state.description;
+        }
+
+        if(this.state.maxLength !== undefined) {
+            parameter.maxLength = this.state.maxLength;
+        }
+
+        if(this.state.maxValue !== undefined) {
+            parameter.maxValue = this.state.maxValue;
+        }
+
+        if(this.state.minLength !== undefined) {
+            parameter.minLength = this.state.minLength;
+        }
+
+        if(this.state.minValue !== undefined) {
+            parameter.minValue = this.state.minValue;
+        }
+
+        parameter.type = this.state.type;
+
+        this.props.onSubmit(parameter, this.state.name);
     }
 
     render() {
@@ -89,23 +127,27 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
 
         return (
         <Fragment>
-            <label htmlFor="parameter-name">Name</label>
-            <div className="input-group">
-                <input type="text" className="form-control" required id="parameter-name" value={this.state.name} onChange={this.setName} />
-            </div>
+            <form onSubmit={this.submitForm}>
+                <label htmlFor="parameter-name">Name</label>
+                <div className="input-group">
+                    <input type="text" className="form-control" required id="parameter-name" value={this.state.name} onChange={this.setName} />
+                </div>
 
-            <label htmlFor="parameter-type">Type</label>
-            <div className="input-group">
-                <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
-            </div>
+                <label htmlFor="parameter-type">Type</label>
+                <div className="input-group">
+                    <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
+                </div>
 
-            <label htmlFor="parameter-default-value">Default value</label>
-            <div className="input-group">
-                {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
-            </div>
+                <label htmlFor="parameter-default-value">Default value</label>
+                <div className="input-group">
+                    {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
+                </div>
 
-            <h3>JSON value (to be deleted)</h3>
-            <p>{json}</p>
+                <button type="submit" className="btn btn-primary">Save</button>
+
+                <h3>JSON value (to be deleted)</h3>
+                <p>{json}</p>
+            </form>
         </Fragment>);
     }
 }

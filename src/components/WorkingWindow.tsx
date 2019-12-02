@@ -2,9 +2,11 @@ import * as React from "react";
 import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 import AddParameter from "./WorkingWindow/AddParameter";
+import Parameter from "../models/Parameter";
 
 export interface WorkingWindowProps {
-    Template: ArmTemplate;
+    template: ArmTemplate;
+    onAddParameter: (parameter: Parameter, name: string) => void;
 }
 
 export class WorkingWindow extends Component<WorkingWindowProps> {
@@ -14,8 +16,8 @@ export class WorkingWindow extends Component<WorkingWindowProps> {
 
     render() {
         return (<Fragment>
-            <h2>Working window</h2>
-            <AddParameter parameter={null}></AddParameter>
+                <h2>Working window</h2>
+                <AddParameter parameter={null} onSubmit={this.props.onAddParameter}></AddParameter>
             </Fragment>)
     }
 }

@@ -3,7 +3,7 @@ import { Component } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 
 export interface TemplateViewerProps {
-    Template: ArmTemplate;
+    template: ArmTemplate;
 }
 
 export class TemplateViewer extends Component<TemplateViewerProps> {
@@ -12,7 +12,7 @@ export class TemplateViewer extends Component<TemplateViewerProps> {
     }
 
     render() {
-        const json = JSON.stringify(this.props.Template, (_key, value) => { if(value !== null) return value;}, 2);
+        const json = JSON.stringify(this.props.template, (_key, value) => { if(value !== null) return value;}, 2);
         const style = {
             height: "500px"
         };

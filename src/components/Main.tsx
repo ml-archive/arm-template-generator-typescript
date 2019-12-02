@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import WorkingWindow from "./WorkingWindow";
 import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
+import Parameter from "../models/Parameter";
 
 export interface MainProps {}
 
@@ -15,9 +16,21 @@ export class Main extends Component<MainProps, MainState> {
     constructor(props: MainProps) {
         super(props);
 
+        this.onAddParameter = this.onAddParameter.bind(this);
+
         this.state = {
             template: new ArmTemplate()
         };
+    }
+
+    onAddParameter(parameter: Parameter, name: string): void {
+        let template = this.state.template;
+
+        template.parameters[name] = parameter;
+
+        this.setState({
+            template: template
+        });
     }
 
     render() {
@@ -28,10 +41,10 @@ export class Main extends Component<MainProps, MainState> {
                     <Menu template={this.state.template} />
                 </div>
                 <div className="col-md-6">
-                    <WorkingWindow Template={this.state.template} />
+                    <WorkingWindow template={this.state.template} onAddParameter={this.onAddParameter} />
                 </div>
                 <div className="col-md">
-                    <TemplateViewer Template={this.state.template} />
+                    <TemplateViewer template={this.state.template} />
                 </div>
             </div>
         </div>)
