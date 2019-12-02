@@ -4,26 +4,20 @@ import Menu from "./Menu";
 import WorkingWindow from "./WorkingWindow";
 import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
-import { Parameter, ParameterMetadata } from "../models/Parameter";
 
 export interface MainProps {}
 
-export class Main extends Component<MainProps> {
-    private Template: ArmTemplate;
+export interface MainState {
+    template: ArmTemplate;
+}
 
+export class Main extends Component<MainProps, MainState> {
     constructor(props: MainProps) {
         super(props);
 
-        this.Template = new ArmTemplate();
-
-        let parameter = new Parameter();
-        parameter.type = "bool";
-        parameter.defaultValue = true;
-        parameter.allowedValues = [true, false];
-        parameter.metadata = new ParameterMetadata();
-        parameter.metadata.description = "This is just a test";
-
-        this.Template.parameters["armTemplateTest"] = parameter;
+        this.state = {
+            template: new ArmTemplate()
+        };
     }
 
     render() {
@@ -31,13 +25,13 @@ export class Main extends Component<MainProps> {
             <h1>Welcome</h1>
             <div className="row">
                 <div className="col-md">
-                    <Menu Template={this.Template} />
+                    <Menu Template={this.state.template} />
                 </div>
                 <div className="col-md-6">
-                    <WorkingWindow Template={this.Template} />
+                    <WorkingWindow Template={this.state.template} />
                 </div>
                 <div className="col-md">
-                    <TemplateViewer Template={this.Template} />
+                    <TemplateViewer Template={this.state.template} />
                 </div>
             </div>
         </div>)
