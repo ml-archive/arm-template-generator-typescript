@@ -72,9 +72,19 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     }
 
     setDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
-        this.setState({
-            defaultValue: this.state.type === "int" ? Number(event.currentTarget.value) : event.currentTarget.value
-        });
+        if(this.state.type === "int") {
+            this.setState({
+                defaultValue: Number(event.currentTarget.value)
+            });
+        } else if(this.state.type === "bool") {
+            this.setState({
+                defaultValue: event.currentTarget.checked
+            });
+        } else {
+            this.setState({
+                defaultValue: event.currentTarget.value
+            });
+        }
     }
 
     setName(event: ChangeEvent<HTMLInputElement>): void {
@@ -126,7 +136,6 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     }
 
     render() {
-        const json = JSON.stringify(this.state);
         let defaultValueType: string;
 
         switch(this.state.type) {
@@ -161,19 +170,23 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
                     </label>
                 </div>
 
-                {this.state.setDefaultValue && 
+                {this.state.setDefaultValue && defaultValueType &&
                 <Fragment><label htmlFor="parameter-default-value">Default value</label>
                     <div className="input-group">
-                        {defaultValueType && <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />}
+                        <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />
                     </div>
                 </Fragment>}
+
+                {this.state.setDefaultValue && this.state.type === "bool" &&
+                <div className="input-group">
+                    <label htmlFor="parameter-default-value">
+                        <input type="checkbox" id="parameter-default-value" checked={this.state.defaultValue} onChange={this.setDefaultValue} />
+                    </label>
+                </div>}
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
                 </div>
-
-                <h3>JSON value (to be deleted)</h3>
-                <p>{json}</p>
             </form>
         </Fragment>);
     }
