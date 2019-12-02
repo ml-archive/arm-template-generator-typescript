@@ -1,12 +1,12 @@
 export class Parameter {
-    Type: string;
-    DefaultValue: any;
-    MinLength: number;
-    MaxLength: number;
-    AllowedValues: any[];
-    Metadata: ParameterMetadata;
+    type: string;
+    defaultValue: any;
+    minLength: number;
+    maxLength: number;
+    allowedValues: any[];
+    metadata: ParameterMetadata;
 }
 
 export class ParameterMetadata {
-    Description: string;
+    description: string;
 }

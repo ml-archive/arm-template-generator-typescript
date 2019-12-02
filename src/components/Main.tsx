@@ -17,13 +17,13 @@ export class Main extends Component<MainProps> {
         this.Template = new ArmTemplate();
 
         let parameter = new Parameter();
-        parameter.Type = "bool";
-        parameter.DefaultValue = true;
-        parameter.AllowedValues = [true, false];
-        parameter.Metadata = new ParameterMetadata();
-        parameter.Metadata.Description = "This is just a test";
+        parameter.type = "bool";
+        parameter.defaultValue = true;
+        parameter.allowedValues = [true, false];
+        parameter.metadata = new ParameterMetadata();
+        parameter.metadata.description = "This is just a test";
 
-        this.Template.Parameters["armTemplateTest"] = parameter;
+        this.Template.parameters["armTemplateTest"] = parameter;
     }
 
     render() {

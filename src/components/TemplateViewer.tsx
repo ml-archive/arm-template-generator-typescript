@@ -16,7 +16,7 @@ export class TemplateViewer extends Component<TemplateViewerProps> {
     }
 
     render() {
-        const json = JSON.stringify(this.Template);
+        const json = JSON.stringify(this.Template, null, 2);
         const style = {
             height: "500px"
         };

@@ -3,14 +3,14 @@ import Variable from "./Variable";
 import Resource from "./Resource";
 
 export class ArmTemplate {
-    Parameters: { [index: string]: Parameter };
-    Variables: { [index: string]: Variable };
-    Resources: Resource[];
+    parameters: { [index: string]: Parameter };
+    variables: { [index: string]: Variable };
+    resources: Resource[];
 
     constructor() {
-        this.Parameters = {};
-        this.Variables = {};
-        this.Resources = [];
+        this.parameters = {};
+        this.variables = {};
+        this.resources = [];
     }
 }
 
