@@ -4,6 +4,7 @@ import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import { Windows } from "./WorkingWindow";
 import EntryTypes from "../models/EntryTypes";
+import Badge from "./Badge";
 
 export interface MenuProps {
     template: ArmTemplate;
@@ -164,24 +165,24 @@ export class Menu extends Component<MenuProps, MenuState> {
             <ul className="list-group">
                 <li key="parameters" className={parametersMenuClass}>
                     <span>Parameters <a href="#" onClick={() => this.onAddParameter()}>Add</a></span>
-                    <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.parameters).length}</span>
+                    <Badge value={String(Object.keys(this.props.template.parameters).length)}></Badge>
                 </li>
                 
                 {this.renderParameters(this.props.template.parameters)}
 
                 <li key="variables" className={variablesMenuClass}>
                     <span>Variables <a href="#" onClick={() => this.onAddVariable()}>Add</a></span>
-                    <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.variables).length}</span>
+                    <Badge value={String(Object.keys(this.props.template.variables).length)}></Badge>
                 </li>
 
                 <li key="resources" className={resourcesMenuClass}>
                     <span>Resources <a href="#" onClick={() => this.onAddResource()}>Add</a></span>
-                    <span className="badge badge-danger badge-pill">{this.props.template.resources.length}</span>
+                    <Badge value={String(this.props.template.resources.length)}></Badge>
                 </li>
 
                 <li key="outputs" className={outputsMenuClass}>
                     <span>Outputs <a href="#" onClick={() => this.onAddOutput()}>Add</a></span>
-                    <span className="badge badge-danger badge-pill">{Object.keys(this.props.template.outputs).length}</span>
+                    <Badge value={String(Object.keys(this.props.template.outputs).length)}></Badge>
                 </li>
             </ul>
             </Fragment>)
