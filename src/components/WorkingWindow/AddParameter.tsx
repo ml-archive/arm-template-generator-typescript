@@ -1,7 +1,7 @@
 import { Component, Fragment, ChangeEvent } from "react";
 import React = require("react");
 import Select from "../Inputs/Select";
-import Parameter from "../../models/Parameter";
+import Parameter, { ParameterMetadata } from "../../models/Parameter";
 
 export interface AddParameterProps {
     parameter?: Parameter;
@@ -28,6 +28,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
 
         this.onSetDefaultValue = this.onSetDefaultValue.bind(this);
         this.setDefaultValue = this.setDefaultValue.bind(this);
+        this.setDescription = this.setDescription.bind(this);
         this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
         this.submitForm = this.submitForm.bind(this);
@@ -47,6 +48,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         } else {
             state.defaultValue = "";
             state.setDefaultValue = false;
+            state.description = "";
         }
 
         if(props.name) {
@@ -87,6 +89,12 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         }
     }
 
+    setDescription(event: ChangeEvent<HTMLInputElement>): void {
+        this.setState({
+            description: event.currentTarget.value
+        });
+    }
+
     setName(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             name: event.currentTarget.value
@@ -111,6 +119,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         }
 
         if(this.state.description) {
+            parameter.metadata = new ParameterMetadata();
             parameter.metadata.description = this.state.description;
         }
 
@@ -183,6 +192,11 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
                         <input type="checkbox" id="parameter-default-value" checked={this.state.defaultValue} onChange={this.setDefaultValue} /> Default value
                     </label>
                 </div>}
+
+                <label htmlFor="parameter-description">Description</label>
+                <div className="input-group">
+                    <input type="text" id="parameter-description" value={this.state.description} className="form-control" onChange={this.setDescription} />
+                </div>
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
