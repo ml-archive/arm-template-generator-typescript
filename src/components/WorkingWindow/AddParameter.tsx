@@ -180,7 +180,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
                 {this.state.setDefaultValue && this.state.type === "bool" &&
                 <div className="input-group">
                     <label htmlFor="parameter-default-value">
-                        <input type="checkbox" id="parameter-default-value" checked={this.state.defaultValue} onChange={this.setDefaultValue} />
+                        <input type="checkbox" id="parameter-default-value" checked={this.state.defaultValue} onChange={this.setDefaultValue} /> Default value
                     </label>
                 </div>}
 
