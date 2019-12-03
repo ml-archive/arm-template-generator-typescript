@@ -3,6 +3,7 @@ import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 import ParameterForm from "./WorkingWindow/ParameterForm";
 import Parameter from "../models/Parameter";
+import ScriptHelper, { ScriptContextType } from "./ScriptHelper/ScriptHelper";
 
 export enum Windows {
     AddParameter,
@@ -56,7 +57,21 @@ export class WorkingWindow extends Component<WorkingWindowProps> {
     render() {
         let headline: string = this.getHeadline(this.props.window, this.props.editKey);
 
+        let showScriptHelper: boolean = false;
+        let scriptContextType: ScriptContextType;
+
+        if(this.props.window === Windows.AddVariable || this.props.window === Windows.EditVariable) {
+            showScriptHelper = true;
+            scriptContextType = ScriptContextType.Variables;
+        }
+
+        if(this.props.window === Windows.AddResource || this.props.window === Windows.EditResource) {
+            showScriptHelper = true;
+            scriptContextType = ScriptContextType.Resources;
+        }
+
         return (<Fragment>
+                {showScriptHelper && <ScriptHelper topLevel={true} template={this.props.template} context={scriptContextType}></ScriptHelper>}
                 <h2>{headline}</h2>
                 {this.props.window === Windows.AddParameter && <ParameterForm parameter={null} onSubmit={this.props.onAddParameter}></ParameterForm> }
                 {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></ParameterForm>}

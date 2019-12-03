@@ -7,6 +7,7 @@ interface SelectProps {
     id?: string;
     value?: string;
     required?: boolean;
+    hideEmpty?: boolean;
 }
 
 class SelectState {
@@ -51,7 +52,7 @@ export class Select extends Component<SelectProps, SelectState> {
 
     render() {
         return (<select required={this.props.required} id={this.props.id} className="form-control" onChange={this.onOptionSelected} value={this.state.selectedValue}>
-            <option></option>
+            {!this.props.hideEmpty && <option></option>}
             {this.props.values.map((value) => {
                 return <option key={value} value={value}>{value}</option>;
             })};
