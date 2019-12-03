@@ -8,6 +8,7 @@ interface ConditionalInputProps {
     conditionalLabel: string;
     valueLabel: string;
     requiredWhenOpen: boolean;
+    id: string;
 }
 
 class ConditionalInputState {
@@ -70,26 +71,26 @@ export class ConditionalInput extends Component<ConditionalInputProps, Condition
     }
 
     render() {
-
+        const conditionalId = this.props.id + "-conditional";
 
         return <Fragment>
             <div className="input-group">
-                <label htmlFor="parameter-set-default">
-                    <input type="checkbox" id="parameter-set-default" checked={this.state.showInput} onChange={this.toggleVisibility} /> {this.props.conditionalLabel}
+                <label htmlFor={conditionalId}>
+                    <input type="checkbox" id={conditionalId} checked={this.state.showInput} onChange={this.toggleVisibility} /> {this.props.conditionalLabel}
                 </label>
             </div>
 
             {this.state.showInput && this.props.type !== "bool" &&
-            <Fragment><label htmlFor="parameter-default-value">{this.props.valueLabel}</label>
+            <Fragment><label htmlFor={this.props.id}>{this.props.valueLabel}</label>
                 <div className="input-group">
-                    <input type={this.props.type} id="parameter-default-value" required={this.props.requiredWhenOpen} value={this.state.value} className="form-control" onChange={this.onChange} />
+                    <input type={this.props.type} id={this.props.id} required={this.props.requiredWhenOpen} value={this.state.value} className="form-control" onChange={this.onChange} />
                 </div>
             </Fragment>}
 
             {this.state.showInput && this.props.type === "bool" &&
             <div className="input-group">
-                <label htmlFor="parameter-default-value">
-                    <input type="checkbox" id="parameter-default-value" checked={this.state.value} onChange={this.onChange} /> {this.props.valueLabel}
+                <label htmlFor={this.props.id}>
+                    <input type="checkbox" id={this.props.id} checked={this.state.value} onChange={this.onChange} /> {this.props.valueLabel}
                 </label>
             </div>}
         </Fragment>

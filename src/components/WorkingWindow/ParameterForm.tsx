@@ -28,6 +28,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
 
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setDescription = this.setDescription.bind(this);
+        this.setMinimumValue = this.setMinimumValue.bind(this);
+        this.setMaximumValue = this.setMaximumValue.bind(this);
         this.setName = this.setName.bind(this);
         this.setType = this.setType.bind(this);
         this.submitForm = this.submitForm.bind(this);
@@ -85,6 +87,18 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         });
     }
 
+    setMinimumValue(value: number): void {
+        this.setState({
+            minValue: value
+        });
+    }
+
+    setMaximumValue(value: number): void {
+        this.setState({
+            maxValue: value
+        });
+    }
+
     setName(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             name: event.currentTarget.value
@@ -115,19 +129,19 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
             parameter.metadata.description = this.state.description;
         }
 
-        if(this.state.maxLength !== undefined) {
+        if(typeof(this.state.maxLength) === "number") {
             parameter.maxLength = this.state.maxLength;
         }
 
-        if(this.state.maxValue !== undefined) {
+        if(typeof(this.state.maxValue) === "number") {
             parameter.maxValue = this.state.maxValue;
         }
 
-        if(this.state.minLength !== undefined) {
+        if(typeof(this.state.minLength) === "number") {
             parameter.minLength = this.state.minLength;
         }
 
-        if(this.state.minValue !== undefined) {
+        if(typeof(this.state.minValue) === "number") {
             parameter.minValue = this.state.minValue;
         }
 
@@ -167,12 +181,17 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                     <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
                 </div>
 
-                {this.state.type && <ConditionalInput conditionalLabel="Set default value?" valueLabel="Default value" initialValue={this.state.defaultValue} type={defaultValueType} onChange={this.setDefaultValue} requiredWhenOpen={true}></ConditionalInput>}
+                {defaultValueType && <ConditionalInput id="parameter-default-value" conditionalLabel="Set default value?" valueLabel="Default value" initialValue={this.props.parameter.defaultValue} type={defaultValueType} onChange={this.setDefaultValue} requiredWhenOpen={true}></ConditionalInput>}
 
                 <label htmlFor="parameter-description">Description</label>
                 <div className="input-group">
                     <input type="text" id="parameter-description" value={this.state.description} className="form-control" onChange={this.setDescription} />
                 </div>
+
+                {this.state.type === "int" && <Fragment>
+                    <ConditionalInput id="parameter-minimum-value" conditionalLabel="Set minimum value" valueLabel="Minimum value" initialValue={this.props.parameter.minValue} type="number" onChange={this.setMinimumValue} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-maximum-value" conditionalLabel="Set maximum value" valueLabel="Maximum value" initialValue={this.props.parameter.maxValue} type="number" onChange={this.setMaximumValue} requiredWhenOpen={true}></ConditionalInput>
+                </Fragment>}
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
