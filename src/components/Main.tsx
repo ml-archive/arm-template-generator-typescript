@@ -45,6 +45,8 @@ export class Main extends Component<MainProps, MainState> {
         this.setState({
             template: template
         });
+
+        this.closeWindow();
     }
 
     onAddParameter(parameter: Parameter, name: string): void {

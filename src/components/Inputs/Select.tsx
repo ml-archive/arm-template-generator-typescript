@@ -27,6 +27,16 @@ export class Select extends Component<SelectProps, SelectState> {
         this.state = state;
     }
 
+    componentDidUpdate(prevProps: SelectProps) {
+        if(prevProps.value === this.props.value) {
+            return;
+        }
+
+        this.setState({
+            selectedValue: this.props.value
+        });
+    }
+
     onOptionSelected (event: ChangeEvent<HTMLSelectElement>) {
         const value = event.currentTarget.value;
 
