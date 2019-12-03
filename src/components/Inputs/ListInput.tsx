@@ -44,7 +44,8 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
             this.props.onChange([""]);
         }
 
-        if(this.props.initialValue !== prevProps.initialValue) {
+        if(this.props.initialValue.length !== prevProps.initialValue.length ||
+            (this.props.initialValue.length !== 0 && this.props.initialValue[0] !== prevProps.initialValue[0])) {
             this.setState({
                 value: this.props.initialValue
             });
