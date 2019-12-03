@@ -6,6 +6,7 @@ import TemplateViewer from "./TemplateViewer";
 import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
+import FileLoader from "./FileLoader";
 
 export interface MainProps {}
 
@@ -19,9 +20,10 @@ export class Main extends Component<MainProps, MainState> {
     constructor(props: MainProps) {
         super(props);
 
+        this.closeWindow = this.closeWindow.bind(this);
+        this.loadFile = this.loadFile.bind(this);
         this.onAddParameter = this.onAddParameter.bind(this);
         this.onDeleteEntry = this.onDeleteEntry.bind(this);
-        this.closeWindow = this.closeWindow.bind(this);
         this.onOpenWindow = this.onOpenWindow.bind(this);
 
         this.state = {
@@ -34,6 +36,14 @@ export class Main extends Component<MainProps, MainState> {
         this.setState({
             window: Windows.None,
             editKey: null
+        });
+    }
+
+    loadFile(fileContent: string): void {
+        let template: ArmTemplate = JSON.parse(fileContent);
+
+        this.setState({
+            template: template
         });
     }
 
@@ -87,6 +97,7 @@ export class Main extends Component<MainProps, MainState> {
     render() {
         return (<div className="container-fluid">
             <h1>Welcome</h1>
+            <FileLoader text="Load file" onFileRead={this.loadFile}></FileLoader>
             <div className="row">
                 <div className="col-md">
                     <Menu deleteEntry={this.onDeleteEntry} openWindow={this.onOpenWindow} template={this.state.template}  />
