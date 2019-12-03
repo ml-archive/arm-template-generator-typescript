@@ -28,6 +28,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
 
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setDescription = this.setDescription.bind(this);
+        this.setMinimumLength = this.setMinimumLength.bind(this);
+        this.setMaximumLength = this.setMaximumLength.bind(this);
         this.setMinimumValue = this.setMinimumValue.bind(this);
         this.setMaximumValue = this.setMaximumValue.bind(this);
         this.setName = this.setName.bind(this);
@@ -84,6 +86,18 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
     setDescription(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             description: event.currentTarget.value
+        });
+    }
+
+    setMinimumLength(value: number): void {
+        this.setState({
+            minLength: value
+        });
+    }
+
+    setMaximumLength(value: number): void {
+        this.setState({
+            maxLength: value
         });
     }
 
@@ -189,9 +203,14 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 </div>
 
                 {this.state.type === "int" && <Fragment>
-                    <ConditionalInput id="parameter-minimum-value" conditionalLabel="Set minimum value" valueLabel="Minimum value" initialValue={this.props.parameter.minValue} type="number" onChange={this.setMinimumValue} requiredWhenOpen={true}></ConditionalInput>
-                    <ConditionalInput id="parameter-maximum-value" conditionalLabel="Set maximum value" valueLabel="Maximum value" initialValue={this.props.parameter.maxValue} type="number" onChange={this.setMaximumValue} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-minimum-value" conditionalLabel="Set minimum value?" valueLabel="Minimum value" initialValue={this.props.parameter.minValue} type="number" onChange={this.setMinimumValue} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-maximum-value" conditionalLabel="Set maximum value?" valueLabel="Maximum value" initialValue={this.props.parameter.maxValue} type="number" onChange={this.setMaximumValue} requiredWhenOpen={true}></ConditionalInput>
                 </Fragment>}
+
+                {(this.state.type === "string" || this.state.type === "securestring" || this.state.type === "array") && <Fragment>
+                <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={this.props.parameter.minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-maximum-length" conditionalLabel="Set maximum length?" valueLabel="Maximum length" initialValue={this.props.parameter.maxLength} type="number" onChange={this.setMaximumLength} requiredWhenOpen={true}></ConditionalInput>
+                    </Fragment>}
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
