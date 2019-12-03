@@ -48,21 +48,21 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.state = new MenuState();
     }
 
-    componentDidUpdate(nextProps: MenuProps) {
-        let parameterCount = Object.keys(nextProps.template.parameters).length;
-        let variableCount = Object.keys(nextProps.template.variables).length;
-        let resourceCount = nextProps.template.resources.length;
-        let outputCount = Object.keys(nextProps.template.outputs).length;
+    componentDidUpdate() {
+        let parameterCount = Object.keys(this.props.template.parameters).length;
+        let variableCount = Object.keys(this.props.template.variables).length;
+        let resourceCount = this.props.template.resources.length;
+        let outputCount = Object.keys(this.props.template.outputs).length;
 
         if(parameterCount != this.state.parameterCount
             || variableCount != this.state.variableCount
             || resourceCount != this.state.resourceCount
             || outputCount != this.state.outputCount) {
             this.setState({
-                parameterCount: Object.keys(nextProps.template.parameters).length,
-                variableCount: Object.keys(nextProps.template.variables).length,
-                resourceCount: nextProps.template.resources.length,
-                outputCount: Object.keys(nextProps.template.outputs).length
+                parameterCount: Object.keys(this.props.template.parameters).length,
+                variableCount: Object.keys(this.props.template.variables).length,
+                resourceCount: this.props.template.resources.length,
+                outputCount: Object.keys(this.props.template.outputs).length
             });
         }
     }

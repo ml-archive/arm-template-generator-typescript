@@ -33,6 +33,10 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         this.setType = this.setType.bind(this);
         this.submitForm = this.submitForm.bind(this);
 
+        this.state = this.initializeState(props);
+    }
+
+    initializeState(props: AddParameterProps): AddParameterState{
         let state = new AddParameterState();
 
         if(props.parameter) {
@@ -45,6 +49,8 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             state.maxValue = props.parameter.maxValue;
             if(props.parameter.metadata) {
                 state.description = props.parameter.metadata.description;
+            } else {
+                state.description = "";
             }
             
             state.setDefaultValue = props.parameter.defaultValue !== undefined && props.parameter.defaultValue !== null;
@@ -60,7 +66,15 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
             state.name = "";
         }
 
-        this.state = state;
+        return state;
+    }
+
+    componentDidUpdate(prevProps: AddParameterProps) {
+        if(this.props.name === prevProps.name) {
+            return;
+        }
+
+        this.setState(this.initializeState(this.props));
     }
 
     onSetDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
