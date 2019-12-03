@@ -1,7 +1,7 @@
 import { Component, ChangeEvent } from "react";
 import React = require("react");
 
-export interface SelectProps {
+interface SelectProps {
     values: string[];
     onOptionSelect?: (option: string) => void;
     id?: string;

@@ -16,7 +16,7 @@ export enum Windows {
     None
 }
 
-export interface WorkingWindowProps {
+interface WorkingWindowProps {
     template: ArmTemplate;
     onAddParameter: (parameter: Parameter, name: string) => void;
     window: Windows;

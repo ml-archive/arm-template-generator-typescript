@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
 
-export interface TemplateViewerProps {
+interface TemplateViewerProps {
     template: ArmTemplate;
 }
 

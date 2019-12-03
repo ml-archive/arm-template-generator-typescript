@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component, Fragment, ChangeEvent } from "react";
 
-export interface FileLoaderProps {
+interface FileLoaderProps {
     text: string;
     onFileRead: (content: string) => void;
 }

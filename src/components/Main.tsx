@@ -8,11 +8,11 @@ import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
 import FileLoader from "./FileLoader";
 
-export interface MainProps {}
+interface MainProps {}
 
-export interface MainState {
+class MainState {
     template: ArmTemplate;
-    window: Windows,
+    window: Windows;
     editKey?: string
 }
 

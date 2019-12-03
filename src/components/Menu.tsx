@@ -6,7 +6,7 @@ import { Windows } from "./WorkingWindow";
 import EntryTypes from "../models/EntryTypes";
 import Badge from "./Badge";
 
-export interface MenuProps {
+interface MenuProps {
     template: ArmTemplate;
     currentlyOpenWindow: Windows,
     openWindow: (window: Windows, key?: string) => void,

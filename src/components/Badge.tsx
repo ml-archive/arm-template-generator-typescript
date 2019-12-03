@@ -1,7 +1,7 @@
 import { Component } from "react";
 import React = require("react");
 
-export class BadgeProps {
+class BadgeProps {
     value: string;
 }
 

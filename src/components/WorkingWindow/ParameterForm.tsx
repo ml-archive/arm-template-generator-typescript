@@ -2,8 +2,9 @@ import { Component, Fragment, ChangeEvent } from "react";
 import React = require("react");
 import Select from "../Inputs/Select";
 import Parameter, { ParameterMetadata } from "../../models/Parameter";
+import ConditionalInput from "../Inputs/ConditionalInput";
 
-export interface ParameterFormProps {
+interface ParameterFormProps {
     parameter?: Parameter;
     name?: string;
     onSubmit: (savedParameter: Parameter, parameterName: string) => void;
@@ -19,14 +20,12 @@ class ParameterFormState {
     maxValue?: number;
     allowedValues: any[];
     description: string;
-    setDefaultValue: boolean;
 }
 
 export class ParameterForm extends Component<ParameterFormProps, ParameterFormState> {
     constructor(props: ParameterFormProps) {
         super(props);
 
-        this.onSetDefaultValue = this.onSetDefaultValue.bind(this);
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setDescription = this.setDescription.bind(this);
         this.setName = this.setName.bind(this);
@@ -52,11 +51,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
             } else {
                 state.description = "";
             }
-            
-            state.setDefaultValue = props.parameter.defaultValue !== undefined && props.parameter.defaultValue !== null;
         } else {
             state.defaultValue = "";
-            state.setDefaultValue = false;
             state.description = "";
         }
 
@@ -77,33 +73,10 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         this.setState(this.initializeState(this.props));
     }
 
-    onSetDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
-        if(event.currentTarget.checked === false) {
-            this.setState({
-                setDefaultValue: event.currentTarget.checked,
-                defaultValue: ""
-            });
-        } else {
-            this.setState({
-                setDefaultValue: event.currentTarget.checked
-            });
-        }
-    }
-
-    setDefaultValue(event: ChangeEvent<HTMLInputElement>): void {
-        if(this.state.type === "int") {
-            this.setState({
-                defaultValue: Number(event.currentTarget.value)
-            });
-        } else if(this.state.type === "bool") {
-            this.setState({
-                defaultValue: event.currentTarget.checked
-            });
-        } else {
-            this.setState({
-                defaultValue: event.currentTarget.value
-            });
-        }
+    setDefaultValue(value: any): void {
+        this.setState({
+            defaultValue: value
+        });
     }
 
     setDescription(event: ChangeEvent<HTMLInputElement>): void {
@@ -120,7 +93,9 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
 
     setType(type: string): void {
         this.setState({
-            type: type
+            type: type,
+            //Reset default value to make sure that the type is correct
+            defaultValue: ""
         });
     }
 
@@ -175,6 +150,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
             case "int":
                 defaultValueType = "number";
                 break;
+            case "bool":
+                defaultValueType = "bool";
         }
 
         return (
@@ -190,25 +167,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                     <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
                 </div>
 
-                <div className="input-group">
-                    <label htmlFor="parameter-set-default">
-                        <input type="checkbox" id="parameter-set-default" checked={this.state.setDefaultValue} onChange={this.onSetDefaultValue} /> Set default value?
-                    </label>
-                </div>
-
-                {this.state.setDefaultValue && defaultValueType &&
-                <Fragment><label htmlFor="parameter-default-value">Default value</label>
-                    <div className="input-group">
-                        <input type={defaultValueType} id="parameter-default-value" value={this.state.defaultValue} className="form-control" onChange={this.setDefaultValue} />
-                    </div>
-                </Fragment>}
-
-                {this.state.setDefaultValue && this.state.type === "bool" &&
-                <div className="input-group">
-                    <label htmlFor="parameter-default-value">
-                        <input type="checkbox" id="parameter-default-value" checked={this.state.defaultValue} onChange={this.setDefaultValue} /> Default value
-                    </label>
-                </div>}
+                {this.state.type && <ConditionalInput conditionalLabel="Set default value?" valueLabel="Default value" initialValue={this.state.defaultValue} type={defaultValueType} onChange={this.setDefaultValue} requiredWhenOpen={true}></ConditionalInput>}
 
                 <label htmlFor="parameter-description">Description</label>
                 <div className="input-group">
