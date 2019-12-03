@@ -14,6 +14,7 @@ enum Types {
     Concat,
     Variables,
     Parameters,
+    Resources,
     Text,
     Custom,
     None
@@ -24,6 +25,7 @@ interface ScriptHelperProps {
     context: ScriptContextType;
     onChange?: (value: string) => void;
     topLevel: boolean;
+    includeText?: boolean;
 }
 
 class ScriptHelperState {
@@ -92,6 +94,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
             <Select values={options} onOptionSelect={this.typeChosen} hideEmpty={true}></Select>
             {this.state.chosenType === Types.Parameters && <ParametersVariablesScript type={ParametersVariablesScriptType.Parameters} onChange={this.onChange} parameters={this.props.template.parameters}></ParametersVariablesScript>}
             {this.state.chosenType === Types.Variables && <ParametersVariablesScript type={ParametersVariablesScriptType.Variables} onChange={this.onChange} variables={this.props.template.variables}></ParametersVariablesScript>}
+            {this.state.chosenType === Types.Custom && <input type="text" onChange={(e) => this.onChange(e.currentTarget.value)} className="form-control" />}
             {this.props.topLevel === true && <Fragment>
             <label htmlFor="script-helper-result">Script:</label>
             <div className="input-group">
