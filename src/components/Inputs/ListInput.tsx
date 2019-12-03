@@ -30,6 +30,29 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
         this.state = state;
     }
 
+    componentDidUpdate(prevProps: ListInputProps) {
+        if(this.props.type !== prevProps.type) {
+            if((this.props.type === "number" && typeof(this.state.value[0]) === "number")
+            || this.props.type === "text" && typeof(this.state.value[0]) === "string") {
+                return;
+            }
+
+            this.setState({
+                value: [""]
+            });
+
+            this.props.onChange([""]);
+        }
+
+        if(this.props.initialValue !== prevProps.initialValue) {
+            this.setState({
+                value: this.props.initialValue
+            });
+
+            this.props.onChange(this.props.initialValue);
+        }
+    }
+
     addValue(): void {
         let values = this.state.value;
         values.push("");
@@ -61,21 +84,11 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
         this.props.onChange(values);
     }
 
-    componentDidUpdate(prevProps: ListInputProps) {
-        if(this.props.type !== prevProps.type) {
-            this.setState({
-                value: [""]
-            });
-
-            this.props.onChange([""]);
-        }
-    }
-
     render() {
         return <Fragment>
             <label>{this.props.label}</label>
             {this.state.value.map((value, index) => {
-                return <div className="input-group">
+                return <div key={index} className="input-group">
                     <input type={this.props.type} value={value} className="form-control" onChange={(event) => this.updateValue(event, index)} />
                     <div className="input-group-append">
                         <button type="button" className="btn btn-outline-primary" onClick={() => this.removeValue(index)}>Remove</button>

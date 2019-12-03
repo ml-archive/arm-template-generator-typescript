@@ -143,7 +143,11 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         }
 
         if(this.state.allowedValues) {
-            parameter.allowedValues = this.state.allowedValues.filter(v => v !== "");
+            let allowedValues = this.state.allowedValues.filter(v => v !== "");
+
+            if(allowedValues.length >= 1) {
+                parameter.allowedValues = allowedValues;
+            }
         }
 
         if(this.state.description) {
@@ -192,12 +196,28 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
 
         const allowedValuesType = this.state.type === "int" ? "number" : "text";
 
+        let defaultValue: string = null;
+        let minValue: number = null;
+        let maxValue: number = null;
+        let minLength: number = null;
+        let maxLength: number = null;
+        let allowedValues: any[] = [];
+
+        if(this.props.parameter) {
+            defaultValue = this.props.parameter.defaultValue;
+            minValue = this.props.parameter.minValue;
+            maxValue = this.props.parameter.maxValue;
+            minLength = this.props.parameter.minLength;
+            maxLength = this.props.parameter.maxLength;
+            allowedValues = this.props.parameter.allowedValues
+        }
+
         return (
         <Fragment>
             <form onSubmit={this.submitForm}>
-                <label htmlFor="parameter-name">Name</label>
+                <label htmlFor="parameter-name">Name ([a-Z][a-Z0-9]*)</label>
                 <div className="input-group">
-                    <input type="text" className="form-control" required id="parameter-name" readOnly={this.props.name !== null && this.props.name !== undefined && this.props.name !== ""} value={this.state.name} onChange={this.setName} />
+                    <input type="text" className="form-control" pattern="\w[\w\d]*" required id="parameter-name" readOnly={this.props.name !== null && this.props.name !== undefined && this.props.name !== ""} value={this.state.name} onChange={this.setName} />
                 </div>
 
                 <label htmlFor="parameter-type">Type</label>
@@ -205,7 +225,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                     <Select id="parameter-type" required={true} values={Parameter.allowedTypes} onOptionSelect={this.setType} value={this.state.type}></Select>
                 </div>
 
-                {defaultValueType && <ConditionalInput id="parameter-default-value" conditionalLabel="Set default value?" valueLabel="Default value" initialValue={this.props.parameter.defaultValue} type={defaultValueType} onChange={this.setDefaultValue} requiredWhenOpen={true}></ConditionalInput>}
+                {defaultValueType && <ConditionalInput id="parameter-default-value" conditionalLabel="Set default value?" valueLabel="Default value" initialValue={defaultValue} type={defaultValueType} onChange={this.setDefaultValue} requiredWhenOpen={true}></ConditionalInput>}
 
                 <label htmlFor="parameter-description">Description</label>
                 <div className="input-group">
@@ -213,17 +233,17 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 </div>
 
                 {this.state.type === "int" && <Fragment>
-                    <ConditionalInput id="parameter-minimum-value" conditionalLabel="Set minimum value?" valueLabel="Minimum value" initialValue={this.props.parameter.minValue} type="number" onChange={this.setMinimumValue} requiredWhenOpen={true}></ConditionalInput>
-                    <ConditionalInput id="parameter-maximum-value" conditionalLabel="Set maximum value?" valueLabel="Maximum value" initialValue={this.props.parameter.maxValue} type="number" onChange={this.setMaximumValue} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-minimum-value" conditionalLabel="Set minimum value?" valueLabel="Minimum value" initialValue={minValue} type="number" onChange={this.setMinimumValue} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-maximum-value" conditionalLabel="Set maximum value?" valueLabel="Maximum value" initialValue={maxValue} type="number" onChange={this.setMaximumValue} requiredWhenOpen={true}></ConditionalInput>
                 </Fragment>}
 
                 {(this.state.type === "string" || this.state.type === "securestring" || this.state.type === "array") && <Fragment>
-                <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={this.props.parameter.minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
-                    <ConditionalInput id="parameter-maximum-length" conditionalLabel="Set maximum length?" valueLabel="Maximum length" initialValue={this.props.parameter.maxLength} type="number" onChange={this.setMaximumLength} requiredWhenOpen={true}></ConditionalInput>
+                <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-maximum-length" conditionalLabel="Set maximum length?" valueLabel="Maximum length" initialValue={maxLength} type="number" onChange={this.setMaximumLength} requiredWhenOpen={true}></ConditionalInput>
                     </Fragment>}
 
-                {this.state.type !== "object" && this.state.type !== "secureObject" && this.state.type !== "array" && 
-                <ListInput initialValue={this.state.allowedValues} label="Allowed values" onChange={this.setAllowedValues} type={allowedValuesType}></ListInput>}
+                {(this.state.type === "string" || this.state.type === "securestring" || this.state.type === "int") &&
+                <ListInput initialValue={allowedValues} label="Allowed values" onChange={this.setAllowedValues} type={allowedValuesType}></ListInput>}
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
