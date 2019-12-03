@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component, Fragment } from 'react'
 import ArmTemplate from "../models/ArmTemplate";
-import AddParameter from "./WorkingWindow/AddParameter";
+import ParameterForm from "./WorkingWindow/ParameterForm";
 import Parameter from "../models/Parameter";
 
 export enum Windows {
@@ -58,8 +58,8 @@ export class WorkingWindow extends Component<WorkingWindowProps> {
 
         return (<Fragment>
                 <h2>{headline}</h2>
-                {this.props.window === Windows.AddParameter && <AddParameter parameter={null} onSubmit={this.props.onAddParameter}></AddParameter> }
-                {this.props.window === Windows.EditParameter && <AddParameter parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></AddParameter>}
+                {this.props.window === Windows.AddParameter && <ParameterForm parameter={null} onSubmit={this.props.onAddParameter}></ParameterForm> }
+                {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></ParameterForm>}
             </Fragment>)
     }
 }

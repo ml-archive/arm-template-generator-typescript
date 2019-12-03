@@ -3,13 +3,13 @@ import React = require("react");
 import Select from "../Inputs/Select";
 import Parameter, { ParameterMetadata } from "../../models/Parameter";
 
-export interface AddParameterProps {
+export interface ParameterFormProps {
     parameter?: Parameter;
     name?: string;
     onSubmit: (savedParameter: Parameter, parameterName: string) => void;
 }
 
-class AddParameterState {
+class ParameterFormState {
     name: string;
     type: string;
     defaultValue: any;
@@ -22,8 +22,8 @@ class AddParameterState {
     setDefaultValue: boolean;
 }
 
-export class AddParameter extends Component<AddParameterProps, AddParameterState> {
-    constructor(props: AddParameterProps) {
+export class ParameterForm extends Component<ParameterFormProps, ParameterFormState> {
+    constructor(props: ParameterFormProps) {
         super(props);
 
         this.onSetDefaultValue = this.onSetDefaultValue.bind(this);
@@ -36,8 +36,8 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         this.state = this.initializeState(props);
     }
 
-    initializeState(props: AddParameterProps): AddParameterState{
-        let state = new AddParameterState();
+    initializeState(props: ParameterFormProps): ParameterFormState{
+        let state = new ParameterFormState();
 
         if(props.parameter) {
             state.type = props.parameter.type;
@@ -69,7 +69,7 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
         return state;
     }
 
-    componentDidUpdate(prevProps: AddParameterProps) {
+    componentDidUpdate(prevProps: ParameterFormProps) {
         if(this.props.name === prevProps.name) {
             return;
         }
@@ -223,4 +223,4 @@ export class AddParameter extends Component<AddParameterProps, AddParameterState
     }
 }
 
-export default AddParameter;
+export default ParameterForm;
