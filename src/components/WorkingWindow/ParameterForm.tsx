@@ -3,6 +3,7 @@ import React = require("react");
 import Select from "../Inputs/Select";
 import Parameter, { ParameterMetadata } from "../../models/Parameter";
 import ConditionalInput from "../Inputs/ConditionalInput";
+import ListInput from "../Inputs/ListInput";
 
 interface ParameterFormProps {
     parameter?: Parameter;
@@ -26,6 +27,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
     constructor(props: ParameterFormProps) {
         super(props);
 
+        this.setAllowedValues = this.setAllowedValues.bind(this);
         this.setDefaultValue = this.setDefaultValue.bind(this);
         this.setDescription = this.setDescription.bind(this);
         this.setMinimumLength = this.setMinimumLength.bind(this);
@@ -75,6 +77,12 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         }
 
         this.setState(this.initializeState(this.props));
+    }
+
+    setAllowedValues(values: any[]): void {
+        this.setState({
+            allowedValues: values
+        });
     }
 
     setDefaultValue(value: any): void {
@@ -135,7 +143,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         }
 
         if(this.state.allowedValues) {
-            parameter.allowedValues = this.state.allowedValues;
+            parameter.allowedValues = this.state.allowedValues.filter(v => v !== "");
         }
 
         if(this.state.description) {
@@ -182,6 +190,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 defaultValueType = "bool";
         }
 
+        const allowedValuesType = this.state.type === "int" ? "number" : "text";
+
         return (
         <Fragment>
             <form onSubmit={this.submitForm}>
@@ -211,6 +221,9 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={this.props.parameter.minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
                     <ConditionalInput id="parameter-maximum-length" conditionalLabel="Set maximum length?" valueLabel="Maximum length" initialValue={this.props.parameter.maxLength} type="number" onChange={this.setMaximumLength} requiredWhenOpen={true}></ConditionalInput>
                     </Fragment>}
+
+                {this.state.type !== "object" && this.state.type !== "secureObject" && this.state.type !== "array" && 
+                <ListInput initialValue={this.state.allowedValues} label="Allowed values" onChange={this.setAllowedValues} type={allowedValuesType}></ListInput>}
 
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
