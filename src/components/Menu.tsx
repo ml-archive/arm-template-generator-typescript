@@ -8,6 +8,7 @@ import Badge from "./Badge";
 
 export interface MenuProps {
     template: ArmTemplate;
+    currentlyOpenWindow: Windows,
     openWindow: (window: Windows, key?: string) => void,
     deleteEntry: (entryType: EntryTypes, key: string) => void
 }
@@ -119,7 +120,7 @@ export class Menu extends Component<MenuProps, MenuState> {
 
     renderParameter(parameterName: string) {
         let className = "list-group-item sub-item d-flex justify-content-between"
-        if(this.state.activeKey === parameterName)
+        if(this.state.activeKey === parameterName && this.props.currentlyOpenWindow !== Windows.None)
             className += " active";
 
         return <li key={parameterName} className={className}>
@@ -146,17 +147,17 @@ export class Menu extends Component<MenuProps, MenuState> {
         let variablesMenuClass: string = baseClassName;
         let resourcesMenuClass: string = baseClassName;
         let outputsMenuClass: string = baseClassName;
-        if(this.state.activeGroup == MenuOption.Parameters)
+        if(this.state.activeGroup == MenuOption.Parameters && this.props.currentlyOpenWindow !== Windows.None)
             parametersMenuClass += " active";
 
-        else if(this.state.activeGroup == MenuOption.Variables)
+        else if(this.state.activeGroup == MenuOption.Variables && this.props.currentlyOpenWindow !== Windows.None)
             variablesMenuClass += " active";
         
 
-        else if(this.state.activeGroup == MenuOption.Resources)
+        else if(this.state.activeGroup == MenuOption.Resources && this.props.currentlyOpenWindow !== Windows.None)
             resourcesMenuClass += " active";
 
-        else if(this.state.activeGroup == MenuOption.Outputs)
+        else if(this.state.activeGroup == MenuOption.Outputs && this.props.currentlyOpenWindow !== Windows.None)
             outputsMenuClass += " active";
 
         return (<Fragment>

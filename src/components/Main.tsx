@@ -100,7 +100,7 @@ export class Main extends Component<MainProps, MainState> {
             <FileLoader text="Load file" onFileRead={this.loadFile}></FileLoader>
             <div className="row">
                 <div className="col-md">
-                    <Menu deleteEntry={this.onDeleteEntry} openWindow={this.onOpenWindow} template={this.state.template}  />
+                    <Menu currentlyOpenWindow={this.state.window} deleteEntry={this.onDeleteEntry} openWindow={this.onOpenWindow} template={this.state.template}  />
                 </div>
                 <div className="col-md-6">
                     <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onAddParameter={this.onAddParameter} />
