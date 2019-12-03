@@ -3,6 +3,7 @@ import ArmTemplate from "../../models/ArmTemplate";
 import React = require("react");
 import Select from "../Inputs/Select";
 import ParametersVariablesScript, { ParametersVariablesScriptType } from "./ParametersVariablesScript";
+import ConcatScript from "./ConcatScript";
 
 export enum ScriptContextType {
     Variables,
@@ -90,11 +91,17 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
             ];
         }
 
+        if(this.props.includeText === true) {
+            options.push(Types[Types.Text])
+        }
+
         return <Fragment>
             <Select values={options} onOptionSelect={this.typeChosen} hideEmpty={true}></Select>
             {this.state.chosenType === Types.Parameters && <ParametersVariablesScript type={ParametersVariablesScriptType.Parameters} onChange={this.onChange} parameters={this.props.template.parameters}></ParametersVariablesScript>}
             {this.state.chosenType === Types.Variables && <ParametersVariablesScript type={ParametersVariablesScriptType.Variables} onChange={this.onChange} variables={this.props.template.variables}></ParametersVariablesScript>}
             {this.state.chosenType === Types.Custom && <input type="text" onChange={(e) => this.onChange(e.currentTarget.value)} className="form-control" />}
+            {this.state.chosenType === Types.Text && <input type="text" onChange={(e) => this.onChange("'" + e.currentTarget.value + "'")} className="form-control" />}
+            {this.state.chosenType === Types.Concat && <ConcatScript template={this.props.template} onChange={this.onChange} context={this.props.context}></ConcatScript>}
             {this.props.topLevel === true && <Fragment>
             <label htmlFor="script-helper-result">Script:</label>
             <div className="input-group">
