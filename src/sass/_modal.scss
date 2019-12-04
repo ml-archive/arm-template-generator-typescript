@@ -3,4 +3,9 @@
         display: block;
         background-color: rgba(100, 100, 100, 0.5);
     }
+
+    &-dialog {
+        width: 90%;
+        max-width: 1000px;
+    }
 }

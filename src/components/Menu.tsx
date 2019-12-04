@@ -137,7 +137,7 @@ export class Menu extends Component<MenuProps, MenuState> {
             return null;
 
         return (<Fragment>
-            {Object.keys(parameters).map((key) => {
+            {Object.keys(parameters).sort().map((key) => {
                 return this.renderParameter(key);
             })}
             </Fragment>)
@@ -174,7 +174,7 @@ export class Menu extends Component<MenuProps, MenuState> {
             return null;
 
         return (<Fragment>
-            {Object.keys(variables).map((key) => {
+            {Object.keys(variables).sort().map((key) => {
                 return this.renderVariable(key);
             })}
             </Fragment>)

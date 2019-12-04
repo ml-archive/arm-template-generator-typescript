@@ -86,6 +86,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
             options = [
                 Types[Types.None],
                 Types[Types.Parameters],
+                Types[Types.Variables],
                 Types[Types.Concat],
                 Types[Types.Custom]
             ];
