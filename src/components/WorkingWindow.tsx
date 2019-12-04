@@ -94,16 +94,19 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
             scriptContextType = ScriptContextType.Resources;
         }
 
-        const modalClass = this.state.showModal ? "modal show" : "modal";
+        let modalClass = "modal fade";
+        if(this.state.showModal) {
+            modalClass += " show";
+         }
 
         return (<Fragment>
                 <div className="row">
                     <div className="col">
                         <h2>{headline}</h2>
                     </div>
-                    <div className="col text-right">
+                    {showScriptHelper && <div className="col text-right">
                         <button className="btn btn-primary" onClick={this.openScriptHelper}>Open script helper</button>
-                    </div>
+                    </div>}
                 </div>
                 {this.props.window === Windows.AddParameter && <ParameterForm parameter={null} onSubmit={this.props.onAddParameter}></ParameterForm> }
                 {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></ParameterForm>}
