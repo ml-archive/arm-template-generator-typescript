@@ -4,6 +4,7 @@ import ArmTemplate from "../models/ArmTemplate";
 import ParameterForm from "./WorkingWindow/ParameterForm";
 import Parameter from "../models/Parameter";
 import ScriptHelper, { ScriptContextType } from "./ScriptHelper/ScriptHelper";
+import Modal from "./Modal";
 
 export enum Windows {
     AddParameter,
@@ -32,8 +33,8 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
     constructor(props: WorkingWindowProps) {
         super(props);
 
-        this.closeScriptHelper = this.closeScriptHelper.bind(this);
-        this.openScriptHelper = this.openScriptHelper.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.openModal = this.openModal.bind(this);
 
         let state = new WorkingWindowState();
         state.showModal = false;
@@ -66,13 +67,13 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
         return "Unknown window selected";
     }
 
-    closeScriptHelper(): void {
+    closeModal(): void {
         this.setState({
             showModal: false
         });
     }
 
-    openScriptHelper(): void {
+    openModal(): void {
         this.setState({
             showModal: true
         });
@@ -94,42 +95,20 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
             scriptContextType = ScriptContextType.Resources;
         }
 
-        let modalClass = "modal fade";
-        if(this.state.showModal) {
-            modalClass += " show";
-         }
-
         return (<Fragment>
                 <div className="row">
                     <div className="col">
                         <h2>{headline}</h2>
                     </div>
                     {showScriptHelper && <div className="col text-right">
-                        <button className="btn btn-primary" onClick={this.openScriptHelper}>Open script helper</button>
+                        <button className="btn btn-primary" onClick={this.openModal}>Open script helper</button>
                     </div>}
                 </div>
                 {this.props.window === Windows.AddParameter && <ParameterForm parameter={null} onSubmit={this.props.onAddParameter}></ParameterForm> }
                 {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></ParameterForm>}
-                {showScriptHelper && <div className={modalClass} tabIndex={-1} role="dialog">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Script helper</h5>
-                                <button type="button" className="close" onClick={this.closeScriptHelper} aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-
-                            <div className="modal-body">
-                                <ScriptHelper topLevel={true} template={this.props.template} context={scriptContextType}></ScriptHelper>
-                            </div>
-
-                            <div className="modal-footer">
-                                <button className="btn btn-primary" type="button" onClick={this.closeScriptHelper}>Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {showScriptHelper && <Modal closeModal={this.closeModal} show={this.state.showModal} headline="Script helper">
+                    <ScriptHelper topLevel={true} template={this.props.template} context={scriptContextType}></ScriptHelper>
+                </Modal>
             }
             </Fragment>)
     }
