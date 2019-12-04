@@ -196,7 +196,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
 
         const allowedValuesType = this.state.type === "int" ? "number" : "text";
 
-        let defaultValue: string = null;
+        let defaultValue: string | number | boolean = null;
         let minValue: number = null;
         let maxValue: number = null;
         let minLength: number = null;

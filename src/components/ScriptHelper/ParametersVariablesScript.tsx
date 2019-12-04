@@ -2,7 +2,6 @@ import { Component, Fragment } from "react";
 import React = require("react");
 import Parameter from "../../models/Parameter";
 import Select from "../Inputs/Select";
-import Variable from "../../models/Variable";
 
 export enum ParametersVariablesScriptType {
     Parameters,
@@ -11,7 +10,7 @@ export enum ParametersVariablesScriptType {
 
 interface ParametersVariablesScriptProps {
     parameters?: { [index: string]: Parameter };
-    variables?: { [index: string]: Variable };
+    variables?: { [index: string]: string | object | object[] };
     type: ParametersVariablesScriptType;
     onChange: (output: string) => void;
 }
