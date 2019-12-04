@@ -5,6 +5,7 @@ import ParameterForm from "./WorkingWindow/ParameterForm";
 import Parameter from "../models/Parameter";
 import ScriptHelper, { ScriptContextType } from "./ScriptHelper/ScriptHelper";
 import Modal from "./Modal";
+import VariableForm from "./WorkingWindow/VariableForm";
 
 export enum Windows {
     AddParameter,
@@ -20,7 +21,8 @@ export enum Windows {
 
 interface WorkingWindowProps {
     template: ArmTemplate;
-    onAddParameter: (parameter: Parameter, name: string) => void;
+    onSubmitParameter: (parameter: Parameter, name: string) => void;
+    onSubmitVariable: (variable: string | object | object[], name: string) => void;
     window: Windows;
     editKey?: string;
 }
@@ -104,8 +106,10 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
                         <button className="btn btn-primary" onClick={this.openModal}>Open script helper</button>
                     </div>}
                 </div>
-                {this.props.window === Windows.AddParameter && <ParameterForm parameter={null} onSubmit={this.props.onAddParameter}></ParameterForm> }
-                {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onAddParameter}></ParameterForm>}
+                {this.props.window === Windows.AddParameter && <ParameterForm onSubmit={this.props.onSubmitParameter}></ParameterForm> }
+                {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onSubmitParameter}></ParameterForm>}
+                {this.props.window === Windows.AddVariable && <VariableForm onSubmit={this.props.onSubmitVariable}></VariableForm>}
+                {this.props.window === Windows.EditVariable && <VariableForm initialValue={this.props.template.variables[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onSubmitVariable}></VariableForm>}
                 {showScriptHelper && <Modal closeModal={this.closeModal} show={this.state.showModal} headline="Script helper">
                     <ScriptHelper topLevel={true} template={this.props.template} context={scriptContextType}></ScriptHelper>
                 </Modal>

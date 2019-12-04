@@ -213,7 +213,6 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         }
 
         return (
-        <Fragment>
             <form onSubmit={this.submitForm}>
                 <label htmlFor="parameter-name">Name ([a-Z][a-Z0-9]*)</label>
                 <div className="input-group">
@@ -248,8 +247,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 <div className="input-group">
                     <button type="submit" className="btn btn-primary">Save</button>
                 </div>
-            </form>
-        </Fragment>);
+            </form>);
     }
 }
 

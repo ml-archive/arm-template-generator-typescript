@@ -22,7 +22,8 @@ export class Main extends Component<MainProps, MainState> {
 
         this.closeWindow = this.closeWindow.bind(this);
         this.loadFile = this.loadFile.bind(this);
-        this.onAddParameter = this.onAddParameter.bind(this);
+        this.onSubmitParameter = this.onSubmitParameter.bind(this);
+        this.onSubmitVariable = this.onSubmitVariable.bind(this);
         this.onDeleteEntry = this.onDeleteEntry.bind(this);
         this.onOpenWindow = this.onOpenWindow.bind(this);
 
@@ -49,10 +50,22 @@ export class Main extends Component<MainProps, MainState> {
         this.closeWindow();
     }
 
-    onAddParameter(parameter: Parameter, name: string): void {
+    onSubmitParameter(parameter: Parameter, name: string): void {
         let template = this.state.template;
 
         template.parameters[name] = parameter;
+
+        this.setState({
+            template: template
+        });
+
+        this.closeWindow();
+    }
+
+    onSubmitVariable(variable: string | object | object[], name: string): void {
+        let template = this.state.template;
+
+        template.variables[name] = variable;
 
         this.setState({
             template: template
@@ -105,7 +118,7 @@ export class Main extends Component<MainProps, MainState> {
                     <Menu currentlyOpenWindow={this.state.window} deleteEntry={this.onDeleteEntry} openWindow={this.onOpenWindow} template={this.state.template}  />
                 </div>
                 <div className="col-md-6">
-                    <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onAddParameter={this.onAddParameter} />
+                    <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onSubmitParameter={this.onSubmitParameter} onSubmitVariable={this.onSubmitVariable} />
                 </div>
                 <div className="col-md">
                     <TemplateViewer template={this.state.template} />

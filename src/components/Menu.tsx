@@ -39,11 +39,14 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.onAddOutput = this.onAddOutput.bind(this);
 
         this.onDeleteParameter = this.onDeleteParameter.bind(this);
-
         this.onEditParameter = this.onEditParameter.bind(this);
-
         this.renderParameters = this.renderParameters.bind(this);
         this.renderParameter = this.renderParameter.bind(this);
+
+        this.onDeleteVariable = this.onDeleteVariable.bind(this);
+        this.onEditVariable = this.onEditVariable.bind(this);
+        this.renderVariables = this.renderVariables.bind(this);
+        this.renderVariable = this.renderVariable.bind(this);
 
         this.state = new MenuState();
     }
@@ -120,7 +123,7 @@ export class Menu extends Component<MenuProps, MenuState> {
 
     renderParameter(parameterName: string) {
         let className = "list-group-item sub-item d-flex justify-content-between"
-        if(this.state.activeKey === parameterName && this.props.currentlyOpenWindow !== Windows.None)
+        if(this.state.activeKey === parameterName && (this.props.currentlyOpenWindow === Windows.AddParameter || this.props.currentlyOpenWindow === Windows.EditParameter))
             className += " active";
 
         return <li key={parameterName} className={className}>
@@ -136,6 +139,43 @@ export class Menu extends Component<MenuProps, MenuState> {
         return (<Fragment>
             {Object.keys(parameters).map((key) => {
                 return this.renderParameter(key);
+            })}
+            </Fragment>)
+    }
+
+    onDeleteVariable(variableName: string) {
+        if(window.confirm('Are you sure you want to delete ' + variableName + '?')) {
+            this.props.deleteEntry(EntryTypes.Variable, variableName);
+        }
+    }
+
+    onEditVariable(variableName: string) {
+        this.setState({
+            activeGroup: MenuOption.Variables,
+            activeKey: variableName
+        });
+
+        this.props.openWindow(Windows.EditVariable, variableName);
+    }
+
+    renderVariable(variableName: string) {
+        let className = "list-group-item sub-item d-flex justify-content-between"
+        if(this.state.activeKey === variableName && (this.props.currentlyOpenWindow === Windows.AddVariable || this.props.currentlyOpenWindow === Windows.EditVariable))
+            className += " active";
+
+        return <li key={variableName} className={className}>
+            {variableName} <span><a href="#" onClick={() => this.onEditVariable(variableName)}>Edit</a>
+            <a href="#" onClick={() => this.onDeleteVariable(variableName)}>Delete</a></span>
+        </li>
+    }
+
+    renderVariables(variables: { [index: string]: string | object | object[] }) {
+        if(this.state.parameterCount <= 0)
+            return null;
+
+        return (<Fragment>
+            {Object.keys(variables).map((key) => {
+                return this.renderVariable(key);
             })}
             </Fragment>)
     }
@@ -175,6 +215,8 @@ export class Menu extends Component<MenuProps, MenuState> {
                     <span>Variables <a href="#" onClick={() => this.onAddVariable()}>Add</a></span>
                     <Badge value={String(Object.keys(this.props.template.variables).length)}></Badge>
                 </li>
+
+                {this.renderVariables(this.props.template.variables)}
 
                 <li key="resources" className={resourcesMenuClass}>
                     <span>Resources <a href="#" onClick={() => this.onAddResource()}>Add</a></span>
