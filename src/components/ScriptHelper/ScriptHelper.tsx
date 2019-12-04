@@ -1,4 +1,4 @@
-import { Component, Fragment } from "react";
+import { Component, Fragment, RefObject } from "react";
 import ArmTemplate from "../../models/ArmTemplate";
 import React = require("react");
 import Select from "../Inputs/Select";
@@ -38,14 +38,26 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
     constructor(props: ScriptHelperProps) {
         super(props);
 
+        this.copyToClipboard = this.copyToClipboard.bind(this);
         this.onChange = this.onChange.bind(this);
         this.typeChosen = this.typeChosen.bind(this);
+
+        this.renderedInput = React.createRef();
 
         let state = new ScriptHelperState();
         state.chosenType = Types.None;
         state.renderedValue = "";
 
         this.state = state;
+    }
+
+    private renderedInput: RefObject<HTMLInputElement>;
+
+    copyToClipboard(): void {
+        this.renderedInput.current.focus();
+        this.renderedInput.current.select();
+        document.execCommand('copy');
+        this.renderedInput.current.blur();
     }
 
     onChange(value: string) {
@@ -106,7 +118,10 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
             {this.props.topLevel === true && <Fragment>
             <label htmlFor="script-helper-result">Script:</label>
             <div className="input-group">
-                <input type="text" id="script-helper-result" className="form-control" readOnly={true} value={this.state.renderedValue} />
+                <input type="text" ref={this.renderedInput} id="script-helper-result" className="form-control" readOnly={true} value={this.state.renderedValue} />
+                <div className="input-group-prepend">
+                    <button type="button" className="btn btn-outline-primary" onClick={this.copyToClipboard}>Copy</button>
+                </div>
             </div>
             </Fragment>}
         </Fragment>
