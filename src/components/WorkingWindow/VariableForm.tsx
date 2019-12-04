@@ -23,6 +23,10 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
         this.setValue = this.setValue.bind(this);
         this.submitForm = this.submitForm.bind(this);
 
+        this.state = this.initializeState(props);
+    }
+
+    initializeState(props: VariableFormProps): VariableFormState {
         let state = new VariableFormState();
         if(props.initialValue) {
             state.value = JSON.stringify(props.initialValue);
@@ -38,6 +42,10 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
                     state.type = "string";
                     break;
             }
+
+            if(state.value[0] === "\"") {
+                state.value = state.value.substr(1, state.value.length - 2);
+            }
         } else {
             state.value = "";
             state.type = "string";
@@ -49,7 +57,15 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
             state.name = "";
         }
 
-        this.state = state;
+        return state;
+    }
+
+    componentDidUpdate(prevProps: VariableFormProps) {
+        if(this.props.name === prevProps.name) {
+            return;
+        }
+
+        this.setState(this.initializeState(this.props));
     }
 
     setName(event: ChangeEvent<HTMLInputElement>): void {
