@@ -34,6 +34,8 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         let state = new ResourceInputState();
         state.type = ResourceInputOptions.Custom;
 
+        //TODO: make proper initialisation of type and value in case of parameter or variable
+
         this.state = state;
     }
 

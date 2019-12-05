@@ -13,6 +13,12 @@ class StorageAccountFormState extends ResourceFormState {
     httpsOnly: string | boolean;
     httpsOnlyString: string;
     httpsOnlyParameterName: string;
+    blobEncryption: boolean | string;
+    blobEncryptionString: string;
+    blobEncryptionParameterName: string;
+    fileEncryption: boolean | string;
+    fileEncryptionString: string;
+    fileEncryptionParameterName: string;
 }
 
 export class StorageAccountForm extends ResourceTypeForm<StorageAccount, StorageAccountFormState> {
@@ -29,6 +35,10 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         this.onKindSelected = this.onKindSelected.bind(this);
         this.onHttpsOnlyUpdated = this.onHttpsOnlyUpdated.bind(this);
         this.onHttpsOnlyParameterNameUpdated = this.onHttpsOnlyParameterNameUpdated.bind(this);
+        this.onBlobEncryptionUpdated = this.onBlobEncryptionUpdated.bind(this);
+        this.onBlobEncryptionParameterNameUpdated = this.onBlobEncryptionParameterNameUpdated.bind(this);
+        this.onFileEncryptionUpdated = this.onFileEncryptionUpdated.bind(this);
+        this.onFileEncryptionParameterNameUpdated = this.onFileEncryptionParameterNameUpdated.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
@@ -40,6 +50,12 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         state.httpsOnly = false;
         state.httpsOnlyString = "";
         state.httpsOnlyParameterName = "";
+        state.blobEncryption = false;
+        state.blobEncryptionString = "";
+        state.blobEncryptionParameterName = "";
+        state.fileEncryption = false;
+        state.fileEncryptionString = "";
+        state.fileEncryptionParameterName = "";
 
         if(props.resource) {
             if(props.resource.kind) {
@@ -54,6 +70,18 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
                 if(props.resource.properties.supportsHttpsTrafficOnly !== null && props.resource.properties.supportsHttpsTrafficOnly !== undefined) {
                     state.httpsOnly = props.resource.properties.supportsHttpsTrafficOnly;
                     state.httpsOnlyString = String(props.resource.properties.supportsHttpsTrafficOnly);
+                }
+
+                if(props.resource.properties.encryption && props.resource.properties.encryption.services) {
+                    if(props.resource.properties.encryption.services.blob) {
+                        state.blobEncryption = props.resource.properties.encryption.services.blob.enabled;
+                        state.blobEncryptionString = String(props.resource.properties.encryption.services.blob.enabled);
+                    }
+
+                    if(props.resource.properties.encryption.services.file) {
+                        state.fileEncryption = props.resource.properties.encryption.services.file.enabled;
+                        state.fileEncryptionString = String(props.resource.properties.encryption.services.file.enabled);
+                    }
                 }
             }
         }
@@ -98,6 +126,32 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         });
     }
 
+    onBlobEncryptionUpdated(value: boolean | string) {
+        this.setState({
+            blobEncryption: value === "" ? false : value,
+            blobEncryptionString: String(value)
+        });
+    }
+
+    onBlobEncryptionParameterNameUpdated(name: string) {
+        this.setState({
+            blobEncryptionParameterName: name
+        });
+    }
+
+    onFileEncryptionUpdated(value: boolean | string) {
+        this.setState({
+            fileEncryption: value === "" ? false : value,
+            fileEncryptionString: String(value)
+        });
+    }
+
+    onFileEncryptionParameterNameUpdated(name: string) {
+        this.setState({
+            fileEncryptionParameterName: name
+        });
+    }
+
     onSubmit(): void {
         throw new Error("Method not implemented.");
     }
@@ -107,6 +161,8 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         const variables = Object.keys(this.props.template.variables);
 
         let httpsOnly = this.state.httpsOnly === true;
+        let blobEncryption = this.state.blobEncryption === true;
+        let fileEncryption = this.state.fileEncryption === true;
 
         return (<Fragment>
             <h3>Kind*</h3>
@@ -123,6 +179,20 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
             <ResourceInput id="resource-https-only" value={this.state.httpsOnlyString} parameters={parameters} variables={variables} onValueUpdated={this.onHttpsOnlyUpdated} onNewParameterNameChanged={this.onHttpsOnlyParameterNameUpdated}>
                 <label htmlFor="resource-https-only-bool">
                     <input type="checkbox" checked={httpsOnly} id="resource-https-only-bool" onChange={(e) => this.onHttpsOnlyUpdated(e.currentTarget.checked)} /> Only allow HTTPS connections
+                </label>
+            </ResourceInput>
+
+            <h3>Encrypt blob storage?</h3>
+            <ResourceInput id="resource-blob-encryption" value={this.state.blobEncryptionString} parameters={parameters} variables={variables} onValueUpdated={this.onBlobEncryptionUpdated} onNewParameterNameChanged={this.onBlobEncryptionParameterNameUpdated}>
+                <label htmlFor="resource-blob-encryption-bool">
+                    <input type="checkbox" checked={blobEncryption} id="resource-blob-encryption-bool" onChange={(e) => this.onBlobEncryptionUpdated(e.currentTarget.checked)} /> Encrypt blob storage
+                </label>
+            </ResourceInput>
+
+            <h3>Encrypt file storage?</h3>
+            <ResourceInput id="resource-file-encryption" value={this.state.fileEncryptionString} parameters={parameters} variables={variables} onValueUpdated={this.onFileEncryptionUpdated} onNewParameterNameChanged={this.onFileEncryptionParameterNameUpdated}>
+                <label htmlFor="resource-file-encryption-bool">
+                    <input type="checkbox" checked={fileEncryption} id="resource-file-encryption-bool" onChange={(e) => this.onFileEncryptionUpdated(e.currentTarget.checked)} /> Encrypt file storage
                 </label>
             </ResourceInput>
         </Fragment>);
