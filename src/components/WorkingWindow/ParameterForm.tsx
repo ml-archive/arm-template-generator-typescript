@@ -237,7 +237,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 </Fragment>}
 
                 {(this.state.type === "string" || this.state.type === "securestring" || this.state.type === "array") && <Fragment>
-                <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
+                    <ConditionalInput id="parameter-minimum-length" conditionalLabel="Set minimum length?" valueLabel="Minimum length" initialValue={minLength} type="number" onChange={this.setMinimumLength} requiredWhenOpen={true}></ConditionalInput>
                     <ConditionalInput id="parameter-maximum-length" conditionalLabel="Set maximum length?" valueLabel="Maximum length" initialValue={maxLength} type="number" onChange={this.setMaximumLength} requiredWhenOpen={true}></ConditionalInput>
                     </Fragment>}
 

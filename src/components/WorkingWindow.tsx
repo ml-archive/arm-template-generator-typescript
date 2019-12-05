@@ -87,6 +87,11 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
         let showScriptHelper: boolean = false;
         let scriptContextType: ScriptContextType;
 
+        if(this.props.window === Windows.AddParameter || this.props.window === Windows.EditParameter) {
+            showScriptHelper = true;
+            scriptContextType = ScriptContextType.Parameters;
+        }
+
         if(this.props.window === Windows.AddVariable || this.props.window === Windows.EditVariable) {
             showScriptHelper = true;
             scriptContextType = ScriptContextType.Variables;

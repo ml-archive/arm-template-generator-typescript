@@ -1,12 +1,14 @@
 export abstract class Resource {
-    Type: string;
-    Name: string;
-    ApiVersion: Date;
-    Tags: ResourceTags;
+    condition: string;
+    type: string;
+    name: string;
+    apiVersion: Date;
+    tags: ResourceTags;
+    dependsOn: string[];
 }
 
 export class ResourceTags {
-    DisplayName: string;
+    displayName: string;
 }
 
 export default Resource;

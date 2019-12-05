@@ -4,8 +4,10 @@ import React = require("react");
 import Select from "../Inputs/Select";
 import ParametersVariablesScript, { ParametersVariablesScriptType } from "./ParametersVariablesScript";
 import ConcatScript from "./ConcatScript";
+import { ResourceGroupScript } from "./ResourceGroupScript";
 
 export enum ScriptContextType {
+    Parameters,
     Variables,
     Resources,
     Outputs
@@ -16,6 +18,7 @@ enum Types {
     Variables,
     Parameters,
     Resources,
+    ResourceGroup,
     Text,
     Custom,
     None
@@ -94,12 +97,22 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
     render() {
         let options: string[];
 
-        if(this.props.context == ScriptContextType.Variables) {
+        if(this.props.context === ScriptContextType.Parameters) {
             options = [
                 Types[Types.None],
-                Types[Types.Parameters],
-                Types[Types.Variables],
                 Types[Types.Concat],
+                Types[Types.ResourceGroup],
+                Types[Types.Custom]
+            ]
+        }
+
+        if(this.props.context === ScriptContextType.Variables) {
+            options = [
+                Types[Types.None],
+                Types[Types.Concat],
+                Types[Types.Parameters],
+                Types[Types.ResourceGroup],
+                Types[Types.Variables],
                 Types[Types.Custom]
             ];
         }
@@ -111,6 +124,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
         return <Fragment>
             <Select values={options} onOptionSelect={this.typeChosen} hideEmpty={true}></Select>
             {this.state.chosenType === Types.Parameters && <ParametersVariablesScript type={ParametersVariablesScriptType.Parameters} onChange={this.onChange} parameters={this.props.template.parameters}></ParametersVariablesScript>}
+            {this.state.chosenType === Types.ResourceGroup && <ResourceGroupScript onChange={this.onChange}></ResourceGroupScript>}
             {this.state.chosenType === Types.Variables && <ParametersVariablesScript type={ParametersVariablesScriptType.Variables} onChange={this.onChange} variables={this.props.template.variables}></ParametersVariablesScript>}
             {this.state.chosenType === Types.Custom && <input type="text" onChange={(e) => this.onChange(e.currentTarget.value)} className="form-control" />}
             {this.state.chosenType === Types.Text && <input type="text" onChange={(e) => this.onChange("'" + e.currentTarget.value + "'")} className="form-control" />}
