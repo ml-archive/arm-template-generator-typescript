@@ -60,7 +60,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
         let value: string = this.state.type ? ResourceType[this.state.type] : ResourceType[ResourceType.None];
 
         return <Fragment>
-            <label htmlFor="resource-type">Type</label>
+            <h3>Type</h3>
             <div className="input-group">
                 <Select onOptionSelect={this.typeSelected} hideEmpty={true} value={value} values={types}></Select>
             </div>

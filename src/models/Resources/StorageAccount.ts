@@ -20,7 +20,7 @@ export class StorageAccount extends Resource {
 }
 
 export class StorageAccountProperties {
-    supportsHttpsTrafficOnly: boolean;
+    supportsHttpsTrafficOnly: boolean | string;
     encryption: StorageAccountEncryption;
     accessTier: string;
 
@@ -37,7 +37,7 @@ export class StorageAccountEncryptionServices {
 }
 
 export class StorageAccountEncryptionService {
-    enabled: boolean;
+    enabled: boolean | string;
 }
 
 export default StorageAccount;
