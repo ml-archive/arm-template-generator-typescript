@@ -7,6 +7,7 @@ import ArmTemplate from "../models/ArmTemplate";
 import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
 import FileLoader from "./FileLoader";
+import Resource from "../models/Resource";
 
 interface MainProps {}
 
@@ -74,6 +75,11 @@ export class Main extends Component<MainProps, MainState> {
         this.closeWindow();
     }
 
+    onSubmitResource(resources: Resource[], parameters: Parameter[]) {
+        console.log("Resources:", resources);
+        console.log("Parameters:", parameters);
+    }
+
     onDeleteEntry(entryType: EntryTypes, key: string): void {
         let template = this.state.template;
 
@@ -118,7 +124,7 @@ export class Main extends Component<MainProps, MainState> {
                     <Menu currentlyOpenWindow={this.state.window} deleteEntry={this.onDeleteEntry} openWindow={this.onOpenWindow} template={this.state.template}  />
                 </div>
                 <div className="col-md-6">
-                    <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onSubmitParameter={this.onSubmitParameter} onSubmitVariable={this.onSubmitVariable} />
+                    <WorkingWindow window={this.state.window} editKey={this.state.editKey} template={this.state.template} onSubmitParameter={this.onSubmitParameter} onSubmitVariable={this.onSubmitVariable} onSubmitResource={this.onSubmitResource} />
                 </div>
                 <div className="col-md">
                     <TemplateViewer template={this.state.template} />

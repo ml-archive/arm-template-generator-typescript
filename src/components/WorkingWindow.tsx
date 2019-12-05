@@ -6,6 +6,8 @@ import Parameter from "../models/Parameter";
 import ScriptHelper, { ScriptContextType } from "./ScriptHelper/ScriptHelper";
 import Modal from "./Modal";
 import VariableForm from "./WorkingWindow/VariableForm";
+import { ResourceForm } from "./WorkingWindow/ResourceForm";
+import Resource from "../models/Resource";
 
 export enum Windows {
     AddParameter,
@@ -23,6 +25,7 @@ interface WorkingWindowProps {
     template: ArmTemplate;
     onSubmitParameter: (parameter: Parameter, name: string) => void;
     onSubmitVariable: (variable: string | object | object[], name: string) => void;
+    onSubmitResource: (resources: Resource[], parameters: Parameter[]) => void;
     window: Windows;
     editKey?: string;
 }
@@ -115,6 +118,8 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
                 {this.props.window === Windows.EditParameter && <ParameterForm parameter={this.props.template.parameters[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onSubmitParameter}></ParameterForm>}
                 {this.props.window === Windows.AddVariable && <VariableForm onSubmit={this.props.onSubmitVariable}></VariableForm>}
                 {this.props.window === Windows.EditVariable && <VariableForm initialValue={this.props.template.variables[this.props.editKey]} name={this.props.editKey} onSubmit={this.props.onSubmitVariable}></VariableForm>}
+                {this.props.window === Windows.AddResource && <ResourceForm onSubmit={this.props.onSubmitResource} template={this.props.template}></ResourceForm>}
+                {this.props.window === Windows.EditResource && <ResourceForm onSubmit={this.props.onSubmitResource} template={this.props.template} resource={this.props.template.resources.find(v => v.name === this.props.editKey)}></ResourceForm>}
                 {showScriptHelper && <Modal closeModal={this.closeModal} show={this.state.showModal} headline="Script helper">
                     <ScriptHelper topLevel={true} template={this.props.template} context={scriptContextType}></ScriptHelper>
                 </Modal>

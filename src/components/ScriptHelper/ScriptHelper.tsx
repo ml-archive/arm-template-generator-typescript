@@ -106,7 +106,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
             ]
         }
 
-        if(this.props.context === ScriptContextType.Variables) {
+        if(this.props.context === ScriptContextType.Variables || ScriptContextType.Resources) {
             options = [
                 Types[Types.None],
                 Types[Types.Concat],
