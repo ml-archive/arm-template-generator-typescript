@@ -204,12 +204,23 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         let allowedValues: any[] = [];
 
         if(this.props.parameter) {
-            defaultValue = this.props.parameter.defaultValue;
-            minValue = this.props.parameter.minValue;
-            maxValue = this.props.parameter.maxValue;
-            minLength = this.props.parameter.minLength;
-            maxLength = this.props.parameter.maxLength;
-            allowedValues = this.props.parameter.allowedValues
+            if(this.props.parameter.defaultValue)
+                defaultValue = this.props.parameter.defaultValue;
+
+            if(this.props.parameter.minValue)
+                minValue = this.props.parameter.minValue;
+
+            if(this.props.parameter.maxValue)
+                maxValue = this.props.parameter.maxValue;
+
+            if(this.props.parameter.minLength)
+                minLength = this.props.parameter.minLength;
+
+            if(this.props.parameter.maxLength)
+                maxLength = this.props.parameter.maxLength;
+
+            if(this.props.parameter.allowedValues)
+                allowedValues = this.props.parameter.allowedValues;
         }
 
         return (
