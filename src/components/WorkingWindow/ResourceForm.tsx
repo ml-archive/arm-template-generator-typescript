@@ -10,7 +10,7 @@ import Parameter from "../../models/Parameter";
 interface ResourceFormProps {
     template: ArmTemplate;
     resource?: Resource;
-    onSubmit: (resources: Resource[], parameters: Parameter[]) => void;
+    onSubmit: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
 }
 
 class ResourceFormState {

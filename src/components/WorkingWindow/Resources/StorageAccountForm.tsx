@@ -153,7 +153,22 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
     }
 
     onSubmit(): void {
-        throw new Error("Method not implemented.");
+        let resource = this.props.resource ? this.props.resource : new StorageAccount();
+
+        this.setBaseInformation(resource);
+        let parametersToCreate = this.getBaseParametersToCreate();
+
+        this.createParameter(this.state.kindParameterName, this.state.kind, "string", StorageAccount.allowedKinds, parametersToCreate);
+
+        this.createParameter(this.state.accessTierParameterName, this.state.accessTier, "string", StorageAccountProperties.allowedAccessTiers, parametersToCreate);
+
+        this.createParameter(this.state.httpsOnlyParameterName, this.state.httpsOnly, "boolean", [], parametersToCreate);
+
+        this.createParameter(this.state.blobEncryptionParameterName, this.state.blobEncryption, "boolean", [], parametersToCreate);
+
+        this.createParameter(this.state.fileEncryptionParameterName, this.state.fileEncryption, "boolean", [], parametersToCreate);
+
+        this.props.onSave([resource], parametersToCreate);
     }
 
     getSpecificMarkup(): JSX.Element {

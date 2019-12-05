@@ -7,7 +7,7 @@ import ResourceInput from "../../Inputs/ResourceInput";
 
 export interface ResourceFormProps<TResource extends Resource> {
     template: ArmTemplate;
-    onSave: (resources: Resource[], parameters: Parameter[]) => void;
+    onSave: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
     resource?: TResource;
 }
 
@@ -27,6 +27,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.onNameUpdated = this.onNameUpdated.bind(this);
         this.onNameParameterNameUpdated = this.onNameParameterNameUpdated.bind(this);
         this.onConditionUpdated = this.onConditionUpdated.bind(this);
+
+        this.setBaseInformation = this.setBaseInformation.bind(this);
+        this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
     }
 
     protected getBaseState(props: ResourceFormProps<TResource>): TState {
@@ -88,12 +91,41 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
         if(this.state.condition) {
             resource.condition = this.state.condition;
+        } else {
+            resource.condition = undefined;
         }
 
         if(this.state.displayName) {
             resource.tags = new ResourceTags();
             resource.tags.displayName = this.state.displayName;
+        } else {
+            resource.tags = undefined;
         }
+    }
+
+    protected getBaseParametersToCreate(): { [index: string]: Parameter } {
+        var parametersToCreate: { [index: string]: Parameter } = {}
+
+        this.createParameter(this.state.nameParameterName, this.state.name, "string", [], parametersToCreate);
+
+        return parametersToCreate;
+    }
+
+    protected createParameter(name: string, defaultValue: boolean | number | string, type: string, allowedValues: number[] | string[], parameterList: { [index: string]: Parameter }): void {
+        if(!name) {
+            return null;
+        }
+
+        let parameter = new Parameter();
+        if(defaultValue !== null && defaultValue !== undefined && defaultValue !== "") {
+            parameter.defaultValue = defaultValue;
+        }
+        if(allowedValues && allowedValues.length > 0) {
+            parameter.allowedValues = allowedValues
+        }
+        parameter.type = type;
+
+        parameterList[name] = parameter;
     }
 
     render(): JSX.Element {

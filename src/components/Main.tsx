@@ -24,6 +24,7 @@ export class Main extends Component<MainProps, MainState> {
         this.closeWindow = this.closeWindow.bind(this);
         this.loadFile = this.loadFile.bind(this);
         this.onSubmitParameter = this.onSubmitParameter.bind(this);
+        this.onSubmitResource = this.onSubmitResource.bind(this);
         this.onSubmitVariable = this.onSubmitVariable.bind(this);
         this.onDeleteEntry = this.onDeleteEntry.bind(this);
         this.onOpenWindow = this.onOpenWindow.bind(this);
@@ -75,9 +76,24 @@ export class Main extends Component<MainProps, MainState> {
         this.closeWindow();
     }
 
-    onSubmitResource(resources: Resource[], parameters: Parameter[]) {
-        console.log("Resources:", resources);
-        console.log("Parameters:", parameters);
+    onSubmitResource(resources: Resource[], parameters: { [index: string]: Parameter }) {
+        let template = this.state.template;
+
+        resources.forEach(resource => {
+            let index = template.resources.findIndex(r => r.name === resource.name);
+
+            if(index < 0) {
+                template.resources.push(resource);
+            } else {
+                template.resources[index] = resource;
+            }
+        });
+
+        Object.keys(parameters).forEach(key => {
+            template.parameters[key] = parameters[key];
+        });
+
+        this.closeWindow();
     }
 
     onDeleteEntry(entryType: EntryTypes, key: string): void {
