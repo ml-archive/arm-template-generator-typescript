@@ -23,16 +23,35 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
 
         this.typeSelected = this.typeSelected.bind(this);
 
+        this.state = this.buildState(props);
+    }
+
+    buildState(props: ResourceFormProps): ResourceFormState {
         let state = new ResourceFormState();
         state.type = ResourceType.None;
 
-        if(this.props.resource) {
-            if(this.props.resource as StorageAccount) {
-                state.type = ResourceType.StorageAccount;
+        if(props.resource) {
+            switch(props.resource.type) {
+                case StorageAccount.resourceType:
+                    state.type = ResourceType.StorageAccount;
+                    break;
             }
         }
 
-        this.state = state;
+        return state;
+    }
+
+    componentDidUpdate(prevProps: ResourceFormProps) {
+        let prevResource: string, curResource: string;
+
+        prevResource = prevProps.resource && prevProps.resource.name ? prevProps.resource.name : "";
+        curResource = this.props.resource && this.props.resource.name ? this.props.resource.name : "";
+
+        if(prevResource === curResource) {
+            return;
+        }
+
+        this.setState(this.buildState(this.props));
     }
 
     typeSelected(option: string) {
