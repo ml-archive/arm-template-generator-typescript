@@ -79,7 +79,7 @@ export class Main extends Component<MainProps, MainState> {
     onSubmitResource(resources: Resource[], parameters: { [index: string]: Parameter }) {
         let template = this.state.template;
 
-        resources.forEach(resource => {
+        resources.forEach((resource: Resource) => {
             let index = template.resources.findIndex(r => r.name === resource.name);
 
             if(index < 0) {

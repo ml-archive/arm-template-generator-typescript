@@ -5,6 +5,7 @@ import Parameter from "../models/Parameter";
 import { Windows } from "./WorkingWindow";
 import EntryTypes from "../models/EntryTypes";
 import Badge from "./Badge";
+import Resource from "../models/Resource";
 
 interface MenuProps {
     template: ArmTemplate;
@@ -47,6 +48,11 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.onEditVariable = this.onEditVariable.bind(this);
         this.renderVariables = this.renderVariables.bind(this);
         this.renderVariable = this.renderVariable.bind(this);
+
+        this.onDeleteResource = this.onDeleteResource.bind(this);
+        this.onEditResource = this.onEditResource.bind(this);
+        this.renderResources = this.renderResources.bind(this);
+        this.renderResource = this.renderResource.bind(this);
 
         this.state = new MenuState();
     }
@@ -180,6 +186,43 @@ export class Menu extends Component<MenuProps, MenuState> {
             </Fragment>)
     }
 
+    onDeleteResource(resourceName: string) {
+        if(window.confirm('Are you sure you want to delete ' + resourceName + '?')) {
+            this.props.deleteEntry(EntryTypes.Resource, resourceName);
+        }
+    }
+
+    onEditResource(resourceName: string) {
+        this.setState({
+            activeGroup: MenuOption.Resources,
+            activeKey: resourceName
+        });
+
+        this.props.openWindow(Windows.EditResource, resourceName);
+    }
+
+    renderResource(resourceName: string) {
+        let className = "list-group-item sub-item d-flex justify-content-between";
+        if(this.state.activeKey === resourceName && (this.props.currentlyOpenWindow === Windows.AddResource || this.props.currentlyOpenWindow === Windows.EditResource))
+            className += " active";
+
+        return <li key={resourceName} className={className}>
+            {resourceName} <span><a href="#" onClick={() => this.onEditResource(resourceName)}>Edit</a>
+            <a href="#" onClick={() => this.onDeleteResource(resourceName)}>Delete</a></span>
+        </li>
+    }
+
+    renderResources(resources: Resource[]) {
+        if(this.state.resourceCount <= 0)
+            return null;
+
+        return <Fragment>
+            {resources.map(resource => {
+                return this.renderResource(resource.name);
+            })}
+        </Fragment>
+    }
+
     render() {
         const baseClassName: string = "list-group-item d-flex justify-content-between";
 
@@ -222,6 +265,8 @@ export class Menu extends Component<MenuProps, MenuState> {
                     <span>Resources <a href="#" onClick={() => this.onAddResource()}>Add</a></span>
                     <Badge value={String(this.props.template.resources.length)}></Badge>
                 </li>
+
+                {this.renderResources(this.props.template.resources)}
 
                 <li key="outputs" className={outputsMenuClass}>
                     <span>Outputs <a href="#" onClick={() => this.onAddOutput()}>Add</a></span>

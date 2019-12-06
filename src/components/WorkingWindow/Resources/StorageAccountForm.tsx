@@ -1,5 +1,5 @@
 import { ResourceTypeForm, ResourceFormState, ResourceFormProps } from "./ResourceTypeForm";
-import StorageAccount, { StorageAccountProperties } from "../../../models/Resources/StorageAccount";
+import StorageAccount, { StorageAccountProperties, StorageAccountEncryption, StorageAccountEncryptionServices, StorageAccountEncryptionService } from "../../../models/Resources/StorageAccount";
 import { Fragment } from "react";
 import React = require("react");
 import Select from "../../Inputs/Select";
@@ -167,6 +167,48 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         this.createParameter(this.state.blobEncryptionParameterName, this.state.blobEncryption, "boolean", [], parametersToCreate);
 
         this.createParameter(this.state.fileEncryptionParameterName, this.state.fileEncryption, "boolean", [], parametersToCreate);
+
+        resource.kind = this.state.kindParameterName 
+            ? this.getParameterString(this.state.kindParameterName)
+            : this.state.kind;
+
+        if(!resource.properties) {
+            resource.properties = new StorageAccountProperties();
+        }
+
+        if(this.state.accessTier) {
+            resource.properties.accessTier = this.state.accessTierParameterName
+                ? this.getParameterString(this.state.accessTierParameterName)
+                : this.state.accessTier;
+        }
+
+        resource.properties.supportsHttpsTrafficOnly = this.state.httpsOnlyParameterName
+            ? this.getParameterString(this.state.httpsOnlyParameterName)
+            : this.state.httpsOnly;
+
+        if(!resource.properties.encryption) {
+            resource.properties.encryption = new StorageAccountEncryption();
+        }
+
+        if(!resource.properties.encryption.services) {
+            resource.properties.encryption.services = new StorageAccountEncryptionServices();
+        }
+
+        if(!resource.properties.encryption.services.blob) {
+            resource.properties.encryption.services.blob = new StorageAccountEncryptionService();
+        }
+
+        if(!resource.properties.encryption.services.file) {
+            resource.properties.encryption.services.file = new StorageAccountEncryptionService();
+        }
+
+        resource.properties.encryption.services.blob.enabled = this.state.blobEncryptionParameterName
+            ? this.getParameterString(this.state.blobEncryptionParameterName)
+            : this.state.blobEncryption;
+
+        resource.properties.encryption.services.file.enabled = this.state.fileEncryptionParameterName
+            ? this.getParameterString(this.state.fileEncryptionParameterName)
+            : this.state.fileEncryption;
 
         this.props.onSave([resource], parametersToCreate);
     }

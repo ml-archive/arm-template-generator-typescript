@@ -87,7 +87,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
     }
 
     protected setBaseInformation(resource: TResource) {
-        resource.name = this.state.name;
+        resource.name = this.state.nameParameterName
+            ? this.getParameterString(this.state.nameParameterName)
+            : this.state.name;
 
         if(this.state.condition) {
             resource.condition = this.state.condition;
@@ -101,6 +103,10 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         } else {
             resource.tags = undefined;
         }
+    }
+
+    protected getParameterString(parameterName: string): string {
+        return "[parameters('" + parameterName + "')]";
     }
 
     protected getBaseParametersToCreate(): { [index: string]: Parameter } {
