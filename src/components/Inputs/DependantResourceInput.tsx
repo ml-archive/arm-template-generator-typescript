@@ -107,9 +107,9 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
                         </div>
                     </Fragment>}
 
-                    {req.required.map((r) => {
-                        <DependantResourceInput key={r.type} dependency={r} onDependencyUpdated={this.onSubRequiredUpdated} resources={this.props.resources}></DependantResourceInput>
-                    })}
+                    {req.required.length > 0 && 
+                        <DependantResourceInput key={req.type} dependency={req} onDependencyUpdated={this.onSubRequiredUpdated} resources={this.props.resources}></DependantResourceInput>
+                    }
                 </Fragment>
             })}
         </Fragment>

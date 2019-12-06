@@ -8,6 +8,8 @@ import { StorageAccountForm } from "./Resources/StorageAccountForm";
 import Parameter from "../../models/Parameter";
 import StorageAccountBlobServiceForm from "./Resources/StorageAccountBlobServiceForm";
 import StorageAccountBlobService from "../../models/Resources/StorageAccountBlobService";
+import StorageAccountBlobContainer from "../../models/Resources/StorageAccountBlobContainer";
+import StorageAccountBlobContainerForm from "./Resources/StorageAccountBlobContainerForm";
 
 interface ResourceFormProps {
     template: ArmTemplate;
@@ -39,6 +41,9 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
                     break;
                 case StorageAccountBlobService.resourceType:
                     state.type = ResourceType.StorageAccountBlobService;
+                    break;
+                case StorageAccountBlobContainer.resourceType:
+                    state.type = ResourceType.StorageAccountBlobContainer;
                     break;
             }
         }
@@ -91,6 +96,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
 
             {this.state.type === ResourceType.StorageAccount && <StorageAccountForm template={this.props.template} resource={this.props.resource as StorageAccount} onSave={this.props.onSubmit}></StorageAccountForm>}
             {this.state.type === ResourceType.StorageAccountBlobService && <StorageAccountBlobServiceForm template={this.props.template} resource={this.props.resource as StorageAccountBlobService} onSave={this.props.onSubmit}></StorageAccountBlobServiceForm>}
+            {this.state.type === ResourceType.StorageAccountBlobContainer && <StorageAccountBlobContainerForm template={this.props.template} resource={this.props.resource as StorageAccountBlobContainer} onSave={this.props.onSubmit}></StorageAccountBlobContainerForm>}
         </Fragment>
     }
 }

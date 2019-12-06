@@ -8,6 +8,7 @@ import DependantResourceInput from "../../Inputs/DependantResourceInput";
 import ResourceDependency from "../../../models/Resources/ResourceDependency";
 import StorageAccount from "../../../models/Resources/StorageAccount";
 import StorageAccountBlobService from "../../../models/Resources/StorageAccountBlobService";
+import StorageAccountBlobContainer from "../../../models/Resources/StorageAccountBlobContainer";
 
 export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
@@ -163,13 +164,17 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
         Object.keys(dependency.newResources).map((type) => {
             let name = dependency.newResources[type];
+            let dependencyModel = dependency.required.find(d => d.type === type);
 
             switch (type) {
                 case StorageAccount.resourceType:
                     resources.push.apply(resources, StorageAccount.getDefault(name));
                     break;
                 case StorageAccountBlobService.resourceType:
-                    resources.push.apply(resources, StorageAccountBlobService.getDefault(name, dependency.required.find(d => d.type === type)));
+                    resources.push.apply(resources, StorageAccountBlobService.getDefault(name, dependencyModel));
+                    break;
+                case StorageAccountBlobContainer.resourceType:
+                    resources.push.apply(resources, StorageAccountBlobContainer.getDefault(name, dependencyModel));
                     break;
             }
         });

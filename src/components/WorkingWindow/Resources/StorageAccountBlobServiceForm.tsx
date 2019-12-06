@@ -11,6 +11,7 @@ export class StorageAccountBlobServiceForm extends ResourceTypeForm<StorageAccou
     protected getNewResource(): StorageAccountBlobService {
         return new StorageAccountBlobService();
     }
+    
     getDependencies(): ResourceDependency {
         return StorageAccountBlobService.getResourceDependencyModel();
     }

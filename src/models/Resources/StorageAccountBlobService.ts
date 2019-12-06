@@ -11,12 +11,11 @@ export class StorageAccountBlobService extends Resource {
     constructor() {
         super();
 
-        this.apiVersion = "2019-04-01";
         this.type = StorageAccountBlobService.resourceType;
     }
 
     getResourceId(): string {
-        return this.getResourceIdString(StorageAccountBlobService.resourceType, "/", this.name);
+        return this.getResourceIdString(this.getNameForConcat(this.storageAccount.getName()), this.getNameForConcat(this.getName()));
     }
 
     getName(): string {
@@ -52,10 +51,12 @@ export class StorageAccountBlobService extends Resource {
         let resources: Resource[] = [];
         let storageAccount: StorageAccount;
 
+        console.log(dependencyModel);
+
         Object.keys(dependencyModel.newResources).forEach(type => {
             const name: string = dependencyModel.newResources[type];
             if(type === StorageAccount.resourceType) {
-                resources.push.apply(StorageAccount.getDefault(name));
+                resources.push.apply(resources, StorageAccount.getDefault(name));
 
                 storageAccount = resources.find(r => r.type === StorageAccount.resourceType) as StorageAccount;
             }

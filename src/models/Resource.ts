@@ -10,6 +10,10 @@ export abstract class Resource {
     static resourceType: string = "";
     static displayName: string = "";
 
+    constructor() {
+        this.apiVersion = "2019-04-01";
+    }
+
     getName(): string {
         return this.name;
     }

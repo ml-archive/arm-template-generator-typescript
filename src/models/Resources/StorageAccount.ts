@@ -12,7 +12,6 @@ export class StorageAccount extends Resource {
         super();
 
         this.type = StorageAccount.resourceType;
-        this.apiVersion = "2019-04-01";
     }
 
     getResourceId(): string {
