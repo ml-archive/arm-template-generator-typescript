@@ -1,11 +1,16 @@
 import { ResourceTypeForm, ResourceTypeFormState, ResourceTypeFormProps } from "./ResourceTypeForm";
 import StorageAccountBlobService from "../../../models/Resources/StorageAccountBlobService";
+import ResourceDependency from "../../../models/Resources/ResourceDependency";
 
 class StorageAccountBlobServiceState extends ResourceTypeFormState {
     
 }
 
 export class StorageAccountBlobServiceForm extends ResourceTypeForm<StorageAccountBlobService, StorageAccountBlobServiceState> {
+    getDependencies(): ResourceDependency {
+        return StorageAccountBlobService.getResourceDependencyModel();
+    }
+
     protected getNewState(): StorageAccountBlobServiceState {
         return new StorageAccountBlobServiceState();
     }

@@ -4,6 +4,8 @@ import Resource, { ResourceTags } from "../../../models/Resource";
 import Parameter from "../../../models/Parameter";
 import React = require("react");
 import ResourceInput from "../../Inputs/ResourceInput";
+import DependantResourceInput from "../../Inputs/DependantResourceInput";
+import ResourceDependency from "../../../models/Resources/ResourceDependency";
 
 export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
@@ -16,6 +18,7 @@ export abstract class ResourceTypeFormState {
     nameParameterName: string;
     condition: string;
     displayName: string;
+    dependency: ResourceDependency;
 }
 
 export abstract class ResourceTypeForm<TResource extends Resource, TState extends ResourceTypeFormState> extends Component<ResourceTypeFormProps<TResource>, TState>  {
@@ -27,10 +30,13 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.onNameUpdated = this.onNameUpdated.bind(this);
         this.onNameParameterNameUpdated = this.onNameParameterNameUpdated.bind(this);
         this.onConditionUpdated = this.onConditionUpdated.bind(this);
+        this.onDependencyUpdated = this.onDependencyUpdated.bind(this);
 
         this.setBaseInformation = this.setBaseInformation.bind(this);
         this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
     }
+
+    abstract getDependencies(): ResourceDependency;
 
     protected getBaseState(props: ResourceTypeFormProps<TResource>): TState {
         let state = this.getNewState();
@@ -54,6 +60,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
                 state.displayName = props.resource.tags.displayName;
             }
         }
+
+        state.dependency = this.getDependencies();
 
         return state;
     }
@@ -134,6 +142,13 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         parameterList[name] = parameter;
     }
 
+    onDependencyUpdated(dependency: ResourceDependency) {
+        console.log("updated dependency", dependency);
+        this.setState({
+            dependency: dependency
+        });
+    }
+
     render(): JSX.Element {
         const parameters = Object.keys(this.props.template.parameters);
         const variables = Object.keys(this.props.template.variables);
@@ -151,6 +166,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
             <input type="text" id="resource-display-name" value={this.state.displayName} onChange={(e) => this.onDisplayNameUpdated(e.currentTarget.value)} className="form-control" />
 
             {this.getSpecificMarkup()}
+
+            <DependantResourceInput headline="Dependencies" resources={this.props.template.resources} dependency={this.state.dependency} onDependencyUpdated={this.onDependencyUpdated}></DependantResourceInput>
 
             <div className="input-group">
                 <button type="submit" className="btn btn-primary">Save</button>

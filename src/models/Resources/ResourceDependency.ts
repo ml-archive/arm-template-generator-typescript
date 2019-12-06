@@ -14,6 +14,8 @@ export class ResourceDependency {
         this.displayName = displayName;
         this.type = type;
         this.required = requiredTypes;
+        this.existingResources = {};
+        this.newResources = {};
     }
 }
 

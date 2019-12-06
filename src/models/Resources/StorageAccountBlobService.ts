@@ -19,7 +19,7 @@ export class StorageAccountBlobService extends Resource {
         return this.getResourceIdString(StorageAccountBlobService.resourceType, "/", this.name);
     }
 
-    get getName(): string {
+    getName(): string {
         return this.simpleName;
     }
 

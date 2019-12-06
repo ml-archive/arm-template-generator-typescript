@@ -10,7 +10,7 @@ export abstract class Resource {
     static resourceType: string = "";
     static displayName: string = "";
 
-    get getName(): string {
+    getName(): string {
         return this.name;
     }
 
@@ -40,7 +40,7 @@ export abstract class Resource {
         return finalName;
     }
 
-    //It's model for itself
+    //Its model for itself
     static getResourceDependencyModel(): ResourceDependency {
         return new ResourceDependency(this.displayName, this.resourceType, this.getAllRequiredResources());
     }

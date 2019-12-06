@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import React = require("react");
 import Select from "../../Inputs/Select";
 import ResourceInput from "../../Inputs/ResourceInput";
+import ResourceDependency from "../../../models/Resources/ResourceDependency";
 
 class StorageAccountFormState extends ResourceTypeFormState {
     kind: string;
@@ -22,6 +23,10 @@ class StorageAccountFormState extends ResourceTypeFormState {
 }
 
 export class StorageAccountForm extends ResourceTypeForm<StorageAccount, StorageAccountFormState> {
+    getDependencies(): ResourceDependency {
+        return StorageAccount.getResourceDependencyModel();
+    }
+
     protected getNewState(): StorageAccountFormState {
         return new StorageAccountFormState();
     }

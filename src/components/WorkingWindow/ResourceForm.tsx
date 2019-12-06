@@ -46,8 +46,8 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
     componentDidUpdate(prevProps: ResourceFormProps) {
         let prevResource: string, curResource: string;
 
-        prevResource = prevProps.resource && prevProps.resource.getName ? prevProps.resource.getName : "";
-        curResource = this.props.resource && this.props.resource.getName ? this.props.resource.getName : "";
+        prevResource = prevProps.resource && prevProps.resource.getName() ? prevProps.resource.getName() : "";
+        curResource = this.props.resource && this.props.resource.getName() ? this.props.resource.getName() : "";
 
         if(prevResource === curResource) {
             return;
