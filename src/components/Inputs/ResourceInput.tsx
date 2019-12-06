@@ -36,7 +36,17 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         state.value = "";
         state.variableName = "";
 
-        //TODO: make proper initialisation of type and value in case of parameter or variable
+        if(props.value.startsWith("[parameters('")) {
+            state.type = ResourceInputOptions.Parameter;
+        }
+
+        if(props.value.startsWith("[variables('")) {
+            state.type = ResourceInputOptions.Variable;
+        }
+
+        if(state.type !== ResourceInputOptions.Custom) {
+            state.value = props.value.split("'")[1];
+        }
 
         this.state = state;
     }
