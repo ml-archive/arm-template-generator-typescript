@@ -32,13 +32,15 @@ export abstract class Resource {
 
     abstract getResourceId(): string;
 
-    protected getNameForConcat(name: string): string {
+    protected getNameForConcat(name: string, doNotAddApostrophes?: boolean): string {
         let finalName: string;
 
         if(name.startsWith("[") && name.endsWith("]")){
             finalName = name.substr(1, name.length - 2);
-        } else {
+        } else if(!doNotAddApostrophes) {
             finalName = "'" + name + "'";
+        } else {
+            finalName = name;
         }
 
         return finalName;

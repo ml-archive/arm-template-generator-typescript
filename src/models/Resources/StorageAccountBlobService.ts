@@ -25,7 +25,7 @@ export class StorageAccountBlobService extends Resource {
     set setName(name: string) {
         this.simpleName = name;
 
-        this.name = this.storageAccount ? this.getNameForConcat(this.storageAccount.name) + "/" + this.simpleName : this.simpleName;
+        this.name = this.storageAccount ? this.getNameForConcat(this.storageAccount.name, true) + "/" + this.simpleName : this.simpleName;
     }
 
     set requiredResources(storageAccount: StorageAccount) {
