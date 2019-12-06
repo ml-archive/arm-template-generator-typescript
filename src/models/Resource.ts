@@ -26,6 +26,18 @@ export abstract class Resource {
     getRequiredTypes(): ResourceType[] {
         return [];
     };
+
+    protected getNameForConcat(name: string): string {
+        let finalName: string;
+
+        if(name.startsWith("[") && name.endsWith("]")){
+            finalName = name.substr(1, name.length - 2);
+        } else {
+            finalName = "'" + name + "'";
+        }
+
+        return finalName;
+    }
 }
 
 export enum ResourceType {

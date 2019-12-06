@@ -1,4 +1,4 @@
-import { ResourceTypeForm, ResourceTypeFormState } from "./ResourceTypeForm";
+import { ResourceTypeForm, ResourceTypeFormState, ResourceTypeFormProps } from "./ResourceTypeForm";
 import StorageAccountBlobService from "../../../models/Resources/StorageAccountBlobService";
 
 class StorageAccountBlobServiceState extends ResourceTypeFormState {
@@ -10,12 +10,27 @@ export class StorageAccountBlobServiceForm extends ResourceTypeForm<StorageAccou
         return new StorageAccountBlobServiceState();
     }
 
+    constructor(props: ResourceTypeFormProps<StorageAccountBlobService>) {
+        super(props);
+
+        this.onSubmit = this.onSubmit.bind(this);
+
+        this.state = this.getBaseState(props);
+    }
+
     getSpecificMarkup(): JSX.Element {
         return null;
     }
 
     onSubmit(): void {
-        throw new Error("Method not implemented.");
+        let resource = this.props.resource ? this.props.resource : new StorageAccountBlobService();
+        this.setBaseInformation(resource);
+
+        let parameters = this.getBaseParametersToCreate();
+
+        //TODO: handle required resources
+
+        this.props.onSave([resource], parameters);
     }
 }
 

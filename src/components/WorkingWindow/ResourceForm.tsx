@@ -6,6 +6,8 @@ import React = require("react");
 import Select from "../Inputs/Select";
 import { StorageAccountForm } from "./Resources/StorageAccountForm";
 import Parameter from "../../models/Parameter";
+import StorageAccountBlobServiceForm from "./Resources/StorageAccountBlobServiceForm";
+import StorageAccountBlobService from "../../models/Resources/StorageAccountBlobService";
 
 interface ResourceFormProps {
     template: ArmTemplate;
@@ -85,6 +87,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
             </div>
 
             {this.state.type === ResourceType.StorageAccount && <StorageAccountForm template={this.props.template} resource={this.props.resource as StorageAccount} onSave={this.props.onSubmit}></StorageAccountForm>}
+            {this.state.type === ResourceType.StorageAccountBlobService && <StorageAccountBlobServiceForm template={this.props.template} resource={this.props.resource as StorageAccountBlobService} onSave={this.props.onSubmit}></StorageAccountBlobServiceForm>}
         </Fragment>
     }
 }
