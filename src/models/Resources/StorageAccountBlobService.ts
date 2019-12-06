@@ -37,6 +37,17 @@ export class StorageAccountBlobService extends Resource {
         this.setName = this.simpleName;
     }
 
+    setDependencies(dependency: ResourceDependency, resources: Resource[]): void {
+        let resourceId = Object.keys(dependency.existingResources).find(k => k === StorageAccount.resourceType);
+
+        if(resourceId) {
+            this.dependsOn = [dependency.existingResources[resourceId].getResourceId()];
+        } else {
+            let name = dependency.newResources[StorageAccount.resourceType];
+            this.dependsOn = [(resources.find(r => r.getName() === name) as StorageAccount).getResourceId()];
+        }
+    }
+
     static getDefault(name: string, dependencyModel: ResourceDependency): Resource[] {
         let resources: Resource[] = [];
         let storageAccount: StorageAccount;

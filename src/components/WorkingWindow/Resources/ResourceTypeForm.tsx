@@ -11,7 +11,7 @@ import StorageAccountBlobService from "../../../models/Resources/StorageAccountB
 
 export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
-    onSave: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
+    onSave: (resources: Resource[], parameters: { [index: string]: Parameter }) => ArmTemplate;
     resource?: TResource;
 }
 
@@ -125,7 +125,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
         let resources = [resource];
 
-        resources.push.apply(resources, this.buildRequiredResources(this.state.dependency));
+        let existingResources = this.buildRequiredResources(this.state.dependency);
+
+        resource.setDependencies(this.state.dependency, existingResources);
 
         this.props.onSave(resources, parametersToCreate);
     }
@@ -152,11 +154,11 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         }
     }
 
-    protected buildRequiredResources(dependency: ResourceDependency): Resource[] {
+    protected buildRequiredResources(dependency: ResourceDependency, existingResources?: Resource[]): Resource[] {
         let resources: Resource[] = [];
 
         dependency.required.forEach(r => {
-            resources.push.apply(this.buildRequiredResources(r));
+            existingResources = this.buildRequiredResources(r, existingResources);
         });
 
         Object.keys(dependency.newResources).map((type) => {
@@ -172,7 +174,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
             }
         });
 
-        return resources;
+        return this.props.onSave(resources, {}).resources;
     }
 
     protected getParameterString(parameterName: string): string {

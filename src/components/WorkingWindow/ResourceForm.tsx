@@ -12,7 +12,7 @@ import StorageAccountBlobService from "../../models/Resources/StorageAccountBlob
 interface ResourceFormProps {
     template: ArmTemplate;
     resource?: Resource;
-    onSubmit: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
+    onSubmit: (resources: Resource[], parameters: { [index: string]: Parameter }) => ArmTemplate;
 }
 
 class ResourceFormState {

@@ -25,7 +25,7 @@ interface WorkingWindowProps {
     template: ArmTemplate;
     onSubmitParameter: (parameter: Parameter, name: string) => void;
     onSubmitVariable: (variable: string | object | object[], name: string) => void;
-    onSubmitResource: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
+    onSubmitResource: (resources: Resource[], parameters: { [index: string]: Parameter }) => ArmTemplate;
     window: Windows;
     editKey?: string;
 }

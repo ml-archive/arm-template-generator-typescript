@@ -54,6 +54,11 @@ export abstract class Resource {
     static getAllRequiredResources(): ResourceDependency[] {
         return [];
     }
+
+    //Nothing to do in the base case
+    setDependencies(_dependency: ResourceDependency, _resources: Resource[]): void {
+        this.dependsOn = [];
+    };
 }
 
 export enum ResourceType {

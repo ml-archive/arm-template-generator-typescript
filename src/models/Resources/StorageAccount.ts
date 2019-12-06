@@ -16,7 +16,7 @@ export class StorageAccount extends Resource {
     }
 
     getResourceId(): string {
-        return this.getResourceIdString(this.name);
+        return this.getResourceIdString(this.getNameForConcat(this.name));
     }
 
     static getDefault(name: string): Resource[] {

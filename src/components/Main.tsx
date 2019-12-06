@@ -76,7 +76,7 @@ export class Main extends Component<MainProps, MainState> {
         this.closeWindow();
     }
 
-    onSubmitResource(resources: Resource[], parameters: { [index: string]: Parameter }) {
+    onSubmitResource(resources: Resource[], parameters: { [index: string]: Parameter }): ArmTemplate {
         let template = this.state.template;
 
         resources.forEach((resource: Resource) => {
@@ -94,6 +94,11 @@ export class Main extends Component<MainProps, MainState> {
         });
 
         this.closeWindow();
+        this.setState({
+            template: template
+        });
+
+        return template;
     }
 
     onDeleteEntry(entryType: EntryTypes, key: string): void {
