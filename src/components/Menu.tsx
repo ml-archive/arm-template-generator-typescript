@@ -201,13 +201,13 @@ export class Menu extends Component<MenuProps, MenuState> {
         this.props.openWindow(Windows.EditResource, resourceName);
     }
 
-    renderResource(resourceName: string) {
+    renderResource(resourceName: string, type: string) {
         let className = "list-group-item sub-item d-flex justify-content-between";
         if(this.state.activeKey === resourceName && (this.props.currentlyOpenWindow === Windows.AddResource || this.props.currentlyOpenWindow === Windows.EditResource))
             className += " active";
 
         return <li key={resourceName} className={className}>
-            {resourceName} <span><a href="#" onClick={() => this.onEditResource(resourceName)}>Edit</a>
+            {resourceName} ({type}) <span><a href="#" onClick={() => this.onEditResource(resourceName)}>Edit</a>
             <a href="#" onClick={() => this.onDeleteResource(resourceName)}>Delete</a></span>
         </li>
     }
@@ -218,7 +218,8 @@ export class Menu extends Component<MenuProps, MenuState> {
 
         return <Fragment>
             {resources.map(resource => {
-                return this.renderResource(resource.name);
+                let name = resource.tags && resource.tags.displayName ? resource.tags.displayName : resource.name;
+                return this.renderResource(name, resource.type);
             })}
         </Fragment>
     }
