@@ -5,7 +5,7 @@ import ResourceDependency from "./ResourceDependency";
 export class StorageAccountBlobService extends Resource {
     static resourceType: string = "Microsoft.Storage/storageAccounts/blobServices";
     static displayName: string = "Storage account blob service";
-    private storageAccount: StorageAccount;
+    private requiredService: StorageAccount;
     private simpleName: string;
 
     constructor() {
@@ -15,7 +15,7 @@ export class StorageAccountBlobService extends Resource {
     }
 
     getResourceId(): string {
-        return this.getResourceIdString(this.getNameForConcat(this.storageAccount.getName()), this.getNameForConcat(this.getName()));
+        return this.getResourceIdString(this.getNameForConcat(this.requiredService.getName()), this.getNameForConcat(this.getName()));
     }
 
     getName(): string {
@@ -25,11 +25,11 @@ export class StorageAccountBlobService extends Resource {
     set setName(name: string) {
         this.simpleName = name;
 
-        this.name = this.storageAccount ? this.getNameForConcat(this.storageAccount.name, true) + "/" + this.simpleName : this.simpleName;
+        this.name = this.requiredService ? this.getNameForConcat(this.requiredService.name, true) + "/" + this.simpleName : this.simpleName;
     }
 
     set requiredResources(storageAccount: StorageAccount) {
-        this.storageAccount = storageAccount;
+        this.requiredService = storageAccount;
         this.dependsOn = [storageAccount.getResourceId()];
 
         //Update full name as it depends on the storage account
@@ -50,8 +50,6 @@ export class StorageAccountBlobService extends Resource {
     static getDefault(name: string, dependencyModel: ResourceDependency): Resource[] {
         let resources: Resource[] = [];
         let storageAccount: StorageAccount;
-
-        console.log(dependencyModel);
 
         Object.keys(dependencyModel.newResources).forEach(type => {
             const name: string = dependencyModel.newResources[type];

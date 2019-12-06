@@ -4,7 +4,7 @@ import ResourceDependency from "./ResourceDependency";
 
 export class StorageAccountBlobContainer extends Resource {
     static resourceType = "Microsoft.Storage/storageAccounts/blobServices/containers";
-    private blobService : StorageAccountBlobService;
+    private requiredService : StorageAccountBlobService;
     private simpleName: string;
     properties: StorageAccountBlobContainerProperties;
 
@@ -15,7 +15,7 @@ export class StorageAccountBlobContainer extends Resource {
     }
 
     getResourceId(): string {
-        return this.getResourceIdString(this.blobService.getName(), "/", this.getName());
+        return this.getResourceIdString(this.requiredService.getName(), "/", this.getName());
     }
 
     getName(): string {
@@ -25,11 +25,11 @@ export class StorageAccountBlobContainer extends Resource {
     set setName(name: string) {
         this.simpleName = name;
 
-        this.name = this.blobService ? this.getNameForConcat(this.blobService.name) + "/" + this.simpleName : this.simpleName;
+        this.name = this.requiredService ? this.getNameForConcat(this.requiredService.name, true) + "/" + this.simpleName : this.simpleName;
     }
 
     set requiredResources(blobService: StorageAccountBlobService) {
-        this.blobService = blobService;
+        this.requiredService = blobService;
         this.dependsOn = [blobService.getResourceId()];
 
         //Update full name as it depends on the storage account
@@ -40,10 +40,13 @@ export class StorageAccountBlobContainer extends Resource {
         let resourceId = Object.keys(dependency.existingResources).find(k => k === StorageAccountBlobService.resourceType);
 
         if(resourceId) {
+            this.requiredResources = dependency.existingResources[resourceId] as StorageAccountBlobService;
             this.dependsOn = [dependency.existingResources[resourceId].getResourceId()];
         } else {
             let name = dependency.newResources[StorageAccountBlobService.resourceType];
-            this.dependsOn = [(resources.find(r => r.getName() === name) as StorageAccountBlobService).getResourceId()];
+            let blobService = resources.find(r => r.getName() === name) as StorageAccountBlobService
+            this.requiredResources = blobService;
+            this.dependsOn = [blobService.getResourceId()];
         }
     }
 

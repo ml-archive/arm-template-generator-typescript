@@ -12,7 +12,7 @@ export class TemplateViewer extends Component<TemplateViewerProps> {
     }
 
     render() {
-        const json = JSON.stringify(this.props.template, (key, value) => { if(value !== null && key !== "simpleName") return value;}, 2);
+        const json = JSON.stringify(this.props.template, (key, value) => { if(value !== null && key !== "simpleName" && !key.startsWith("requiredService")) return value;}, 2);
         const style = {
             height: "500px"
         };
