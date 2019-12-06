@@ -13,6 +13,7 @@ interface ResourceInputProps {
 
 class ResourceInputState {
     value: string;
+    realValue: string;
     variableName: string;
     type: ResourceInputOptions;
 }
@@ -31,9 +32,14 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         this.onValueSelected = this.onValueSelected.bind(this);
         this.setVariableName = this.setVariableName.bind(this);
 
+        this.state = this.getState(props);
+    }
+
+    getState(props: ResourceInputProps): ResourceInputState {
         let state = new ResourceInputState();
         state.type = ResourceInputOptions.Custom;
         state.value = "";
+        state.realValue = "";
         state.variableName = "";
 
         if(props.value.startsWith("[parameters('")) {
@@ -46,9 +52,18 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
 
         if(state.type !== ResourceInputOptions.Custom) {
             state.value = props.value.split("'")[1];
+            state.realValue = props.value;
         }
 
-        this.state = state;
+        return state;
+    }
+
+    componentDidUpdate(prevProps: ResourceInputProps) {
+        if(this.props.value === prevProps.value || this.props.value === this.state.realValue) {
+            return;
+        }
+
+        this.setState(this.getState(this.props));
     }
 
     onTypeSelected(option: string): void {
@@ -57,6 +72,7 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         this.setState({
             type: ResourceInputOptions[key],
             value: "",
+            realValue: "",
             variableName: ""
         });
 
@@ -65,13 +81,15 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
     }
 
     onValueSelected(option: string): void {
-        const typeString = this.state.type === ResourceInputOptions.Parameter ? "parameter" : "variable";
+        const typeString = this.state.type === ResourceInputOptions.Parameter ? "parameters" : "variables";
+        const realValue = "[" + typeString + "('" + option + "')]";
 
         this.setState({
-            value: option
+            value: option,
+            realValue: realValue
         });
 
-        this.props.onValueUpdated("[" + typeString + "('" + option + "')]");
+        this.props.onValueUpdated(realValue);
     }
 
     setVariableName(event: ChangeEvent<HTMLInputElement>) {
