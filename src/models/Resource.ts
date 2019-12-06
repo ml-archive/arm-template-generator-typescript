@@ -1,3 +1,5 @@
+import ResourceDependency from "./Resources/ResourceDependency";
+
 export abstract class Resource {
     condition: string;
     type: string;
@@ -5,6 +7,8 @@ export abstract class Resource {
     apiVersion: string;
     tags: ResourceTags;
     dependsOn: string[];
+    static resourceType: string = "";
+    static displayName: string = "";
 
     get getName(): string {
         return this.name;
@@ -23,9 +27,6 @@ export abstract class Resource {
     }
 
     abstract getResourceId(): string;
-    getRequiredTypes(): ResourceType[] {
-        return [];
-    };
 
     protected getNameForConcat(name: string): string {
         let finalName: string;
@@ -37,6 +38,21 @@ export abstract class Resource {
         }
 
         return finalName;
+    }
+
+    //It's model for itself
+    static getResourceDependencyModel(): ResourceDependency {
+        return new ResourceDependency(this.displayName, this.resourceType, this.getAllRequiredResources());
+    }
+
+    //Is to be implemented by the extending classes
+    static getDefault(_name: string, _resourceDependency: ResourceDependency): Resource[] {
+        return [];
+    }
+
+    //All required resources' dependency model
+    static getAllRequiredResources(): ResourceDependency[] {
+        return [];
     }
 }
 

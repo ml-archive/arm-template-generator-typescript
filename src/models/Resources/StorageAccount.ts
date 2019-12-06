@@ -2,6 +2,7 @@ import Resource from "../Resource";
 
 export class StorageAccount extends Resource {
     static resourceType: string = "Microsoft.Storage/storageAccounts";
+    static displayName: string = "Storage account";
     kind: string;
     properties: StorageAccountProperties;
 
@@ -18,7 +19,7 @@ export class StorageAccount extends Resource {
         return this.getResourceIdString(this.name);
     }
 
-    static getDefault(name: string): StorageAccount {
+    static getDefault(name: string): Resource[] {
         let account = new StorageAccount();
 
         account.name = name;
@@ -33,7 +34,7 @@ export class StorageAccount extends Resource {
         account.properties.encryption.services.file = new StorageAccountEncryptionService();
         account.properties.encryption.services.file.enabled = true;
 
-        return account;
+        return [account];
     }
 }
 
