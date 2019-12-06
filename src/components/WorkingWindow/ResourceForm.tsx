@@ -37,6 +37,9 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
                 case StorageAccount.resourceType:
                     state.type = ResourceType.StorageAccount;
                     break;
+                case StorageAccountBlobService.resourceType:
+                    state.type = ResourceType.StorageAccountBlobService;
+                    break;
             }
         }
 
