@@ -112,7 +112,8 @@ export class Main extends Component<MainProps, MainState> {
         }
 
         if(entryType === EntryTypes.Resource) {
-            delete(template.resources[Number(key)]);
+            let index = template.resources.findIndex(r => r.name === key);
+            delete(template.resources[index]);
         }
 
         this.setState({
