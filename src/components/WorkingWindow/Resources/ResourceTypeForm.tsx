@@ -5,23 +5,23 @@ import Parameter from "../../../models/Parameter";
 import React = require("react");
 import ResourceInput from "../../Inputs/ResourceInput";
 
-export interface ResourceFormProps<TResource extends Resource> {
+export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
     onSave: (resources: Resource[], parameters: { [index: string]: Parameter }) => void;
     resource?: TResource;
 }
 
-export abstract class ResourceFormState {
+export abstract class ResourceTypeFormState {
     name: string;
     nameParameterName: string;
     condition: string;
     displayName: string;
 }
 
-export abstract class ResourceTypeForm<TResource extends Resource, TState extends ResourceFormState> extends Component<ResourceFormProps<TResource>, TState>  {
+export abstract class ResourceTypeForm<TResource extends Resource, TState extends ResourceTypeFormState> extends Component<ResourceTypeFormProps<TResource>, TState>  {
     protected abstract getNewState(): TState;
 
-    constructor(props: ResourceFormProps<TResource>) {
+    constructor(props: ResourceTypeFormProps<TResource>) {
         super(props);
 
         this.onNameUpdated = this.onNameUpdated.bind(this);
@@ -32,7 +32,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
     }
 
-    protected getBaseState(props: ResourceFormProps<TResource>): TState {
+    protected getBaseState(props: ResourceTypeFormProps<TResource>): TState {
         let state = this.getNewState();
 
         state.name = "";
@@ -87,7 +87,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
     }
 
     protected setBaseInformation(resource: TResource) {
-        resource.name = this.state.nameParameterName
+        resource.setName = this.state.nameParameterName
             ? this.getParameterString(this.state.nameParameterName)
             : this.state.name;
 

@@ -1,11 +1,11 @@
-import { ResourceTypeForm, ResourceFormState, ResourceFormProps } from "./ResourceTypeForm";
+import { ResourceTypeForm, ResourceTypeFormState, ResourceTypeFormProps } from "./ResourceTypeForm";
 import StorageAccount, { StorageAccountProperties, StorageAccountEncryption, StorageAccountEncryptionServices, StorageAccountEncryptionService } from "../../../models/Resources/StorageAccount";
 import { Fragment } from "react";
 import React = require("react");
 import Select from "../../Inputs/Select";
 import ResourceInput from "../../Inputs/ResourceInput";
 
-class StorageAccountFormState extends ResourceFormState {
+class StorageAccountFormState extends ResourceTypeFormState {
     kind: string;
     kindParameterName: string;
     accessTier: string;
@@ -26,7 +26,7 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         return new StorageAccountFormState();
     }
 
-    constructor(props: ResourceFormProps<StorageAccount>) {
+    constructor(props: ResourceTypeFormProps<StorageAccount>) {
         super(props);
 
         this.onAccessTierParameterNameUpdated = this.onAccessTierParameterNameUpdated.bind(this);

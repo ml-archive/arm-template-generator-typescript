@@ -218,8 +218,8 @@ export class Menu extends Component<MenuProps, MenuState> {
 
         return <Fragment>
             {resources.map(resource => {
-                let displayName = resource.tags && resource.tags.displayName ? resource.tags.displayName : resource.name;
-                return this.renderResource(displayName, resource.name, resource.type);
+                let displayName = resource.tags && resource.tags.displayName ? resource.tags.displayName : resource.getName;
+                return this.renderResource(displayName, resource.getName, resource.type);
             })}
         </Fragment>
     }

@@ -6,6 +6,14 @@ export abstract class Resource {
     tags: ResourceTags;
     dependsOn: string[];
 
+    get getName(): string {
+        return this.name;
+    }
+
+    set setName(name: string) {
+        this.name = name;
+    }
+
     protected getResourceIdString(...parts: string[]) {
         if(parts.length > 0) {
             return "[resourceId('" + this.type + "', " + parts.join(", ") + ")]";
