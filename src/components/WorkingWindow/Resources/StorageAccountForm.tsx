@@ -5,6 +5,7 @@ import React = require("react");
 import Select from "../../Inputs/Select";
 import ResourceInput from "../../Inputs/ResourceInput";
 import ResourceDependency from "../../../models/Resources/ResourceDependency";
+import Parameter from "../../../models/Parameter";
 
 class StorageAccountFormState extends ResourceTypeFormState {
     kind: string;
@@ -23,6 +24,10 @@ class StorageAccountFormState extends ResourceTypeFormState {
 }
 
 export class StorageAccountForm extends ResourceTypeForm<StorageAccount, StorageAccountFormState> {
+    protected getNewResource(): StorageAccount {
+        return new StorageAccount();
+    }
+
     getDependencies(): ResourceDependency {
         return StorageAccount.getResourceDependencyModel();
     }
@@ -157,22 +162,7 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         });
     }
 
-    onSubmit(): void {
-        let resource = this.props.resource ? this.props.resource : new StorageAccount();
-
-        this.setBaseInformation(resource);
-        let parametersToCreate = this.getBaseParametersToCreate();
-
-        this.createParameter(this.state.kindParameterName, this.state.kind, "string", StorageAccount.allowedKinds, parametersToCreate);
-
-        this.createParameter(this.state.accessTierParameterName, this.state.accessTier, "string", StorageAccountProperties.allowedAccessTiers, parametersToCreate);
-
-        this.createParameter(this.state.httpsOnlyParameterName, this.state.httpsOnly, "boolean", [], parametersToCreate);
-
-        this.createParameter(this.state.blobEncryptionParameterName, this.state.blobEncryption, "boolean", [], parametersToCreate);
-
-        this.createParameter(this.state.fileEncryptionParameterName, this.state.fileEncryption, "boolean", [], parametersToCreate);
-
+    protected setSpecificInformation(resource: StorageAccount): void {
         resource.kind = this.state.kindParameterName 
             ? this.getParameterString(this.state.kindParameterName)
             : this.state.kind;
@@ -214,8 +204,22 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         resource.properties.encryption.services.file.enabled = this.state.fileEncryptionParameterName
             ? this.getParameterString(this.state.fileEncryptionParameterName)
             : this.state.fileEncryption;
+    }
 
-        this.props.onSave([resource], parametersToCreate);
+    protected getSpecificNewParameters(): { [index: string]: Parameter; } {
+        let parametersToCreate: { [index: string]: Parameter; } = {};
+
+        this.createParameter(this.state.kindParameterName, this.state.kind, "string", StorageAccount.allowedKinds, parametersToCreate);
+
+        this.createParameter(this.state.accessTierParameterName, this.state.accessTier, "string", StorageAccountProperties.allowedAccessTiers, parametersToCreate);
+
+        this.createParameter(this.state.httpsOnlyParameterName, this.state.httpsOnly, "boolean", [], parametersToCreate);
+
+        this.createParameter(this.state.blobEncryptionParameterName, this.state.blobEncryption, "boolean", [], parametersToCreate);
+
+        this.createParameter(this.state.fileEncryptionParameterName, this.state.fileEncryption, "boolean", [], parametersToCreate);
+
+        return parametersToCreate;
     }
 
     getSpecificMarkup(): JSX.Element {

@@ -6,6 +6,8 @@ import React = require("react");
 import ResourceInput from "../../Inputs/ResourceInput";
 import DependantResourceInput from "../../Inputs/DependantResourceInput";
 import ResourceDependency from "../../../models/Resources/ResourceDependency";
+import StorageAccount from "../../../models/Resources/StorageAccount";
+import StorageAccountBlobService from "../../../models/Resources/StorageAccountBlobService";
 
 export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
@@ -23,6 +25,7 @@ export abstract class ResourceTypeFormState {
 
 export abstract class ResourceTypeForm<TResource extends Resource, TState extends ResourceTypeFormState> extends Component<ResourceTypeFormProps<TResource>, TState>  {
     protected abstract getNewState(): TState;
+    protected abstract getNewResource(): TResource;
 
     constructor(props: ResourceTypeFormProps<TResource>) {
         super(props);
@@ -31,6 +34,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.onNameParameterNameUpdated = this.onNameParameterNameUpdated.bind(this);
         this.onConditionUpdated = this.onConditionUpdated.bind(this);
         this.onDependencyUpdated = this.onDependencyUpdated.bind(this);
+
+        this.onSubmit = this.onSubmit.bind(this);
 
         this.setBaseInformation = this.setBaseInformation.bind(this);
         this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
@@ -68,8 +73,6 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
     abstract getSpecificMarkup(): JSX.Element;
 
-    abstract onSubmit(): void;
-
     onNameUpdated(value: string) {
         this.setState({
             name: value
@@ -94,6 +97,42 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         });
     }
 
+    onSubmit() {
+        let resource = this.props.resource ? this.props.resource : this.getNewResource();
+
+        resource.setName = this.state.nameParameterName
+            ? this.getParameterString(this.state.nameParameterName)
+            : this.state.name;
+
+        if(this.state.condition) {
+            resource.condition = this.state.condition;
+        } else {
+            resource.condition = undefined;
+        }
+
+        if(this.state.displayName) {
+            resource.tags = new ResourceTags();
+            resource.tags.displayName = this.state.displayName;
+        } else {
+            resource.tags = undefined;
+        }
+
+        this.setSpecificInformation(resource);
+
+        let parametersToCreate = this.getSpecificNewParameters();
+
+        this.createParameter(this.state.nameParameterName, this.state.name, "string", [], parametersToCreate);
+
+        let resources = [resource];
+
+        resources.push.apply(resources, this.buildRequiredResources(this.state.dependency));
+
+        this.props.onSave(resources, parametersToCreate);
+    }
+
+    protected abstract setSpecificInformation(resource: TResource): void;
+    protected abstract getSpecificNewParameters(): { [index: string]: Parameter };
+
     protected setBaseInformation(resource: TResource) {
         resource.setName = this.state.nameParameterName
             ? this.getParameterString(this.state.nameParameterName)
@@ -111,6 +150,29 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         } else {
             resource.tags = undefined;
         }
+    }
+
+    protected buildRequiredResources(dependency: ResourceDependency): Resource[] {
+        let resources: Resource[] = [];
+
+        dependency.required.forEach(r => {
+            resources.push.apply(this.buildRequiredResources(r));
+        });
+
+        Object.keys(dependency.newResources).map((type) => {
+            let name = dependency.newResources[type];
+
+            switch (type) {
+                case StorageAccount.resourceType:
+                    resources.push.apply(resources, StorageAccount.getDefault(name));
+                    break;
+                case StorageAccountBlobService.resourceType:
+                    resources.push.apply(resources, StorageAccountBlobService.getDefault(name, dependency.required.find(d => d.type === type)));
+                    break;
+            }
+        });
+
+        return resources;
     }
 
     protected getParameterString(parameterName: string): string {
@@ -143,7 +205,6 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
     }
 
     onDependencyUpdated(dependency: ResourceDependency) {
-        console.log("updated dependency", dependency);
         this.setState({
             dependency: dependency
         });

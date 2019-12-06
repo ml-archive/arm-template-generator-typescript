@@ -103,7 +103,7 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
                     {this.state.createNew && <Fragment>
                         <label>Name of new resource*</label>
                         <div className="input-group">
-                            <input type="text" pattern="[a-Z][a-Z0-9]*" className="form-control" value={this.state.newName} onChange={(e) => { this.onNewNameChanged(req.type, e.currentTarget.value)} } />
+                            <input type="text" pattern="\w[\w\d]*" className="form-control" value={this.state.newName} onChange={(e) => { this.onNewNameChanged(req.type, e.currentTarget.value)} } />
                         </div>
                     </Fragment>}
 
