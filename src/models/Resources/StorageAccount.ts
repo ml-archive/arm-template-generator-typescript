@@ -17,6 +17,24 @@ export class StorageAccount extends Resource {
     getResourceId(): string {
         return this.getResourceIdString(this.name);
     }
+
+    static getDefault(name: string): StorageAccount {
+        let account = new StorageAccount();
+
+        account.name = name;
+        account.kind = "StorageV2";
+        account.properties = new StorageAccountProperties();
+        account.properties.accessTier = "Cool";
+        account.properties.supportsHttpsTrafficOnly = true;
+        account.properties.encryption = new StorageAccountEncryption();
+        account.properties.encryption.services = new StorageAccountEncryptionServices();
+        account.properties.encryption.services.blob = new StorageAccountEncryptionService();
+        account.properties.encryption.services.blob.enabled = true;
+        account.properties.encryption.services.file = new StorageAccountEncryptionService();
+        account.properties.encryption.services.file.enabled = true;
+
+        return account;
+    }
 }
 
 export class StorageAccountProperties {
