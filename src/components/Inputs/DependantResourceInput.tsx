@@ -49,7 +49,7 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
     onResourceSelected(type: string, name: string) {
         let dependency = this.state.dependency;
 
-        if(name === "Create new") {
+        if(this.props.resources.filter(r => r.type === type).map(r => r.getName()).findIndex(n => n === name) < 0) {
             delete(dependency.existingResources[type]);
 
             this.setState({
@@ -63,7 +63,7 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
                 newName: ""
             });
 
-            dependency.existingResources[type] = this.props.resources.find(r => (r.getName ? r.getName() : r.name) === name);
+            dependency.existingResources[type] = this.props.resources.find(r => r.getName() === name);
         }
 
         this.setState({
