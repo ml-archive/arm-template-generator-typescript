@@ -58,6 +58,10 @@ export class Main extends Component<MainProps, MainState> {
             template.resources.push(ResourceManager.getSpecificResource(r));
         });
 
+        template.resources.map(r => {
+            r.setDependantResources(template.resources);
+        });
+
         this.setState({
             template: template
         });

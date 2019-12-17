@@ -32,6 +32,8 @@ export abstract class Resource {
 
     abstract getResourceId(): string;
 
+    setDependantResources(_allResources: Resource[]): void { }
+
     protected getNameForConcat(name: string, doNotAddApostrophes?: boolean): string {
         let finalName: string;
 

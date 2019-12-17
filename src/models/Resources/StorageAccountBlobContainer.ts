@@ -18,6 +18,31 @@ export class StorageAccountBlobContainer extends Resource {
         return this.getResourceIdString(this.requiredService.getName(), "/", this.getName());
     }
 
+    setDependantResources(allResources: Resource[]): void {
+        if(!this.dependsOn || this.dependsOn.length <= 0) {
+            return;
+        }
+
+        let accountDependency: string = this.dependsOn.find(d => d.includes("'" + StorageAccountBlobService.resourceType + "'"));
+
+        if(accountDependency) {
+            let services: StorageAccountBlobService[] = allResources.filter(r => r.type === StorageAccountBlobService.resourceType).map(r => r as StorageAccountBlobService);
+
+            this.requiredService = services.find(a => a.getResourceId() === accountDependency);
+
+            if(this.requiredService) {
+                let name: string = this.simpleName;
+
+                if(!name) {
+                    let splitName: string[] = this.name.split('/');
+                    name = splitName[splitName.length - 1];
+                }
+
+                this.setName = name;
+            }
+        }
+    }
+
     getName(): string {
         return this.simpleName;
     }

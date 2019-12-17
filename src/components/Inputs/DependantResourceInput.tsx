@@ -7,6 +7,7 @@ import Select from "./Select";
 interface DependantResourceInputProps {
     dependency: ResourceDependency;
     resources: Resource[];
+    currentResource?: Resource;
     onDependencyUpdated: (dependency: ResourceDependency) => void;
     headline?: string;
 }
@@ -93,13 +94,21 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
         return <Fragment>
             {this.props.headline && <h3>{this.props.headline}</h3>}
             {this.props.dependency.required.map(req => {
-                //Temporary fix with getName check until load file loads into correct classes with functions available
-                let values = this.props.resources.filter(r => r.type === req.type).map(r => r.getName ? r.getName() : r.name);
+                let availableResources = this.props.resources.filter(r => r.type === req.type);
+                let values = availableResources.map(r => r.getName());
                 values.push("Create new");
+
+                let value: string = "";
+                if(this.props.currentResource && this.props.currentResource.dependsOn && this.props.currentResource.dependsOn.length > 0) {
+                    let dependentResource = this.props.resources.find(r => r.type === req.type && this.props.currentResource.dependsOn.findIndex(d => d === r.getResourceId()) >= 0);
+                    if(dependentResource) {
+                        value = dependentResource.getName();
+                    }
+                }
 
                 return <Fragment key={req.displayName}>
                     <h4>{req.displayName}*</h4>
-                    <Select values={values} required={true} onOptionSelect={(option) => { this.onResourceSelected(req.type, option) }}></Select>
+                    <Select values={values} required={true} value={value} onOptionSelect={(option) => { this.onResourceSelected(req.type, option) }}></Select>
                     {this.state.createNew && <Fragment>
                         <label>Name of new resource*</label>
                         <div className="input-group">

@@ -235,7 +235,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
             {this.getSpecificMarkup()}
 
-            <DependantResourceInput headline="Dependencies" resources={this.props.template.resources} dependency={this.state.dependency} onDependencyUpdated={this.onDependencyUpdated}></DependantResourceInput>
+            <DependantResourceInput headline="Dependencies" resources={this.props.template.resources} currentResource={this.props.resource} dependency={this.state.dependency} onDependencyUpdated={this.onDependencyUpdated}></DependantResourceInput>
 
             <div className="input-group">
                 <button type="submit" className="btn btn-primary">Save</button>
