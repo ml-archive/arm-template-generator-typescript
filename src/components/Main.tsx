@@ -8,6 +8,7 @@ import Parameter from "../models/Parameter";
 import EntryTypes from "../models/EntryTypes";
 import FileLoader from "./FileLoader";
 import Resource from "../models/Resource";
+import ResourceManager from "../models/Resources/ResourceManager";
 
 interface MainProps {}
 
@@ -43,7 +44,19 @@ export class Main extends Component<MainProps, MainState> {
     }
 
     loadFile(fileContent: string): void {
-        let template: ArmTemplate = JSON.parse(fileContent);
+        let dumbTemplate: ArmTemplate = JSON.parse(fileContent);
+
+        let template = new ArmTemplate();
+
+        Object.keys(dumbTemplate.parameters).forEach((key) => {
+            template.parameters[key] = Object.assign(new Parameter(), dumbTemplate.parameters[key]);
+        });
+        
+        template.variables = dumbTemplate.variables;
+
+        dumbTemplate.resources.map(r => {
+            template.resources.push(ResourceManager.getSpecificResource(r));
+        });
 
         this.setState({
             template: template
