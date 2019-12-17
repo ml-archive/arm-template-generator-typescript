@@ -41,11 +41,13 @@ export class StorageAccountBlobContainer extends Resource {
 
         if(resourceId) {
             this.requiredResources = dependency.existingResources[resourceId] as StorageAccountBlobService;
+            this.setName = this.simpleName;
             this.dependsOn = [dependency.existingResources[resourceId].getResourceId()];
         } else {
             let name = dependency.newResources[StorageAccountBlobService.resourceType];
             let blobService = resources.find(r => r.getName() === name) as StorageAccountBlobService
             this.requiredResources = blobService;
+            this.setName = this.simpleName;
             this.dependsOn = [blobService.getResourceId()];
         }
     }
