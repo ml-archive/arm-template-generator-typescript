@@ -36,6 +36,7 @@ export class Main extends Component<MainProps, MainState> {
         };
     }
 
+    //Base function for closing working window
     closeWindow(): void {
         this.setState({
             window: Windows.None,
