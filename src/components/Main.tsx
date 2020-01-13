@@ -50,6 +50,7 @@ export class Main extends Component<MainProps, MainState> {
         let template = new ArmTemplate();
 
         Object.keys(dumbTemplate.parameters).forEach((key) => {
+            //Need to assign to object as simply JSON parsing doesn't produce objects with logics but only structs
             template.parameters[key] = Object.assign(new Parameter(), dumbTemplate.parameters[key]);
         });
         
