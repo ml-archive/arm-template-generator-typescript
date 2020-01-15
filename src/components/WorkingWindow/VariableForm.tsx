@@ -60,7 +60,7 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
         return state;
     }
 
-    componentDidUpdate(prevProps: VariableFormProps) {
+    componentDidUpdate(prevProps: VariableFormProps): void {
         if(this.props.name === prevProps.name) {
             return;
         }
@@ -94,7 +94,7 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
         }
     }
 
-    render() {
+    render(): JSX.Element {
         const submitText = this.props.name ? "Save" : "Add";
 
         const selectOptions = ["string", "object", "array"];

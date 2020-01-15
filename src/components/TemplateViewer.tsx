@@ -11,7 +11,7 @@ export class TemplateViewer extends Component<TemplateViewerProps> {
         super(props);
     }
 
-    render() {
+    render(): JSX.Element {
         const json = JSON.stringify(this.props.template, (key, value) => { if(value !== null && key !== "simpleName" && !key.startsWith("requiredService")) return value;}, 2);
         const style = {
             height: "500px"

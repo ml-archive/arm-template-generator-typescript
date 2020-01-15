@@ -30,7 +30,7 @@ export class ConditionalInput extends Component<ConditionalInputProps, Condition
         this.state = state;
     }
 
-    componentDidUpdate(prevProps: ConditionalInputProps) {
+    componentDidUpdate(prevProps: ConditionalInputProps): void {
         if(this.props.initialValue !== prevProps.initialValue) {
             this.setState({
                 value: this.props.initialValue,
@@ -39,7 +39,7 @@ export class ConditionalInput extends Component<ConditionalInputProps, Condition
         }
     }
 
-    onChange(event: ChangeEvent<HTMLInputElement>) {
+    onChange(event: ChangeEvent<HTMLInputElement>): void {
         let value: any;
 
         if(this.props.type === "number") {
@@ -56,7 +56,7 @@ export class ConditionalInput extends Component<ConditionalInputProps, Condition
         });
     }
 
-    toggleVisibility(event: ChangeEvent<HTMLInputElement>) {
+    toggleVisibility(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             showInput: event.currentTarget.checked
         });
@@ -70,7 +70,7 @@ export class ConditionalInput extends Component<ConditionalInputProps, Condition
         }
     }
 
-    render() {
+    render(): JSX.Element {
         const conditionalId = this.props.id + "-conditional";
 
         return <Fragment>

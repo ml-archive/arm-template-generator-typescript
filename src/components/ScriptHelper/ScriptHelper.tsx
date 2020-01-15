@@ -63,7 +63,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
         this.renderedInput.current.blur();
     }
 
-    onChange(value: string) {
+    onChange(value: string): void {
         let renderedValue = this.props.topLevel
             ? "[" + value + "]"
             : value;
@@ -94,7 +94,7 @@ export class ScriptHelper extends Component<ScriptHelperProps, ScriptHelperState
         this.onChange("");
     }
 
-    render() {
+    render(): JSX.Element {
         let options: string[];
 
         if(this.props.context === ScriptContextType.Parameters) {

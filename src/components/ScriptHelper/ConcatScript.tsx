@@ -67,7 +67,7 @@ export class ConcatScript extends Component<ConcatScriptProps, ConcatScriptState
         this.props.onChange(this.getRenderedString(values));
     }
 
-    render() {
+    render(): JSX.Element {
         return <Fragment>
             {this.state.values.map((_value, index) => {
                 return <Fragment key={index}>

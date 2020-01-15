@@ -84,7 +84,7 @@ export class WorkingWindow extends Component<WorkingWindowProps, WorkingWindowSt
         });
     }
 
-    render() {
+    render(): JSX.Element {
         let headline: string = this.getHeadline(this.props.window, this.props.editKey);
 
         let showScriptHelper: boolean = false;

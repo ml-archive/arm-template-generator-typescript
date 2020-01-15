@@ -156,7 +156,7 @@ export class Main extends Component<MainProps, MainState> {
         });
     }
 
-    render() {
+    render(): JSX.Element {
         return (<div className="container-fluid">
             <h1>Welcome</h1>
             <FileLoader text="Load file" onFileRead={this.loadFile}></FileLoader>

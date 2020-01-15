@@ -10,7 +10,7 @@ export class Badge extends Component<BadgeProps> {
         super(props);
     }
 
-    render() {
+    render(): JSX.Element {
         return (<span className="badge badge-secondary badge-pill">{this.props.value}</span>)
     }
 }
