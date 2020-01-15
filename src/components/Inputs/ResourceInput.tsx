@@ -101,11 +101,17 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
     }
 
     render() {
-        const options = [
-            ResourceInputOptions[ResourceInputOptions.Parameter],
-            ResourceInputOptions[ResourceInputOptions.Variable],
-            ResourceInputOptions[ResourceInputOptions.Custom]
-        ];
+        let options: string[] = [];
+
+        if(this.props.parameters && this.props.parameters.length > 0){
+            options.push(ResourceInputOptions[ResourceInputOptions.Parameter]);
+        }
+
+        if(this.props.variables && this.props.variables.length > 0){
+            options.push(ResourceInputOptions[ResourceInputOptions.Variable]);
+        }
+
+        options.push(ResourceInputOptions[ResourceInputOptions.Custom]);
 
         let typeValue = ResourceInputOptions[this.state.type];
 
