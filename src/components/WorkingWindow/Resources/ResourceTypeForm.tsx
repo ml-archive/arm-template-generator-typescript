@@ -9,6 +9,7 @@ import ResourceDependency from "../../../models/Resources/ResourceDependency";
 import StorageAccount from "../../../models/Resources/StorageAccount";
 import StorageAccountBlobService from "../../../models/Resources/StorageAccountBlobService";
 import StorageAccountBlobContainer from "../../../models/Resources/StorageAccountBlobContainer";
+import Select from "../../Inputs/Select";
 
 export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
@@ -19,6 +20,7 @@ export interface ResourceTypeFormProps<TResource extends Resource> {
 export abstract class ResourceTypeFormState {
     name: string;
     nameParameterName: string;
+    location: string;
     condition: string;
     displayName: string;
     dependency: ResourceDependency;
@@ -35,10 +37,10 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.onNameParameterNameUpdated = this.onNameParameterNameUpdated.bind(this);
         this.onConditionUpdated = this.onConditionUpdated.bind(this);
         this.onDependencyUpdated = this.onDependencyUpdated.bind(this);
+        this.onLocationUpdated = this.onLocationUpdated.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
-        this.setBaseInformation = this.setBaseInformation.bind(this);
         this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
     }
 
@@ -52,6 +54,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
         state.condition = "";
         state.displayName = "";
+        state.location = "";
 
         if(props.resource) {
             if(props.resource.name) {
@@ -60,6 +63,10 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
             if(props.resource.condition) {
                 state.condition = props.resource.condition;
+            }
+
+            if(props.resource.location) {
+                state.location = props.resource.location;
             }
 
             if(props.resource.tags && props.resource.tags.displayName) {
@@ -111,6 +118,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
             resource.condition = undefined;
         }
 
+        resource.location = this.state.location;
+
         if(this.state.displayName) {
             resource.tags = new ResourceTags();
             resource.tags.displayName = this.state.displayName;
@@ -135,25 +144,6 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
     protected abstract setSpecificInformation(resource: TResource): void;
     protected abstract getSpecificNewParameters(): { [index: string]: Parameter };
-
-    protected setBaseInformation(resource: TResource) {
-        resource.setName = this.state.nameParameterName
-            ? this.getParameterString(this.state.nameParameterName)
-            : this.state.name;
-
-        if(this.state.condition) {
-            resource.condition = this.state.condition;
-        } else {
-            resource.condition = undefined;
-        }
-
-        if(this.state.displayName) {
-            resource.tags = new ResourceTags();
-            resource.tags.displayName = this.state.displayName;
-        } else {
-            resource.tags = undefined;
-        }
-    }
 
     protected buildRequiredResources(dependency: ResourceDependency, existingResources?: Resource[]): Resource[] {
         let resources: Resource[] = [];
@@ -217,15 +207,27 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         });
     }
 
+    onLocationUpdated(location: string) {
+        this.setState({
+            location: location
+        });
+    }
+
     render(): JSX.Element {
         const parameters = Object.keys(this.props.template.parameters);
         const variables = Object.keys(this.props.template.variables);
+
+        let locations = parameters;
+        locations.unshift("[resourceGroup().location]");
 
         return <form onSubmit={this.onSubmit}>
             <h3>Name*</h3>
             <ResourceInput id="resource-name" parameters={parameters} variables={variables} value={this.state.name} onValueUpdated={this.onNameUpdated} onNewParameterNameChanged={this.onNameParameterNameUpdated}>
                 <input type="text" id="resource-name" value={this.state.name} onChange={(e) => this.onNameUpdated(e.currentTarget.value)} className="form-control" required />
             </ResourceInput>
+
+            <h3>Location*</h3>
+            <Select id="resource-location" required={true} values={locations} value={this.state.location} onOptionSelect={this.onLocationUpdated}></Select>
 
             <h3>Condition (to deploy)</h3>
             <input type="text" id="resource-condition" value={this.state.condition} onChange={(e) => this.onConditionUpdated(e.currentTarget.value)} className="form-control" />

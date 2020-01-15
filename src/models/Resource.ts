@@ -4,6 +4,7 @@ export abstract class Resource {
     condition: string;
     type: string;
     name: string;
+    location: string;
     apiVersion: string;
     tags: ResourceTags;
     dependsOn: string[];
