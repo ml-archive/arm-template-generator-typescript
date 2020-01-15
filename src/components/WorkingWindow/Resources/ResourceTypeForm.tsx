@@ -119,7 +119,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
             resource.condition = undefined;
         }
 
-        resource.location = this.state.location;
+        resource.location = this.state.locationParameterName 
+            ? this.getParameterString(this.state.locationParameterName)
+            : this.state.location;
 
         if(this.state.displayName) {
             resource.tags = new ResourceTags();
