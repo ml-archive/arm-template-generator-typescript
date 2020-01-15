@@ -121,88 +121,88 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         this.state = state;
     }
 
-    onAccessTierSelected(option: string) {
+    onAccessTierSelected(option: string): void {
         this.setState({
             accessTier: option
         });
     }
 
-    onAccessTierParameterNameUpdated(name: string) {
+    onAccessTierParameterNameUpdated(name: string): void {
         this.setState({
             accessTierParameterName: name
         });
     }
 
-    onKindParameterNameUpdated(name: string) {
+    onKindParameterNameUpdated(name: string): void {
         this.setState({
             kindParameterName: name
         });
     }
 
-    onKindSelected(option: string) {
+    onKindSelected(option: string): void {
         this.setState({
             kind: option
         });
     }
 
-    onHttpsOnlyUpdated(value: boolean | string) {
+    onHttpsOnlyUpdated(value: boolean | string): void {
         this.setState({
             httpsOnly: value === "" ? false : value,
             httpsOnlyString: String(value)
         });
     }
 
-    onHttpsOnlyParameterNameUpdated(name: string) {
+    onHttpsOnlyParameterNameUpdated(name: string): void {
         this.setState({
             httpsOnlyParameterName: name
         });
     }
 
-    onBlobEncryptionUpdated(value: boolean | string) {
+    onBlobEncryptionUpdated(value: boolean | string): void {
         this.setState({
             blobEncryption: value === "" ? false : value,
             blobEncryptionString: String(value)
         });
     }
 
-    onBlobEncryptionParameterNameUpdated(name: string) {
+    onBlobEncryptionParameterNameUpdated(name: string): void {
         this.setState({
             blobEncryptionParameterName: name
         });
     }
 
-    onFileEncryptionUpdated(value: boolean | string) {
+    onFileEncryptionUpdated(value: boolean | string): void {
         this.setState({
             fileEncryption: value === "" ? false : value,
             fileEncryptionString: String(value)
         });
     }
 
-    onFileEncryptionParameterNameUpdated(name: string) {
+    onFileEncryptionParameterNameUpdated(name: string): void {
         this.setState({
             fileEncryptionParameterName: name
         });
     }
 
-    onSkuNameUpdated(name: string) {
+    onSkuNameUpdated(name: string): void {
         this.setState({
             skuName: name
         });
     }
 
-    onSkuNameParameterNameUpdated(name: string) {
+    onSkuNameParameterNameUpdated(name: string): void {
         this.setState({
             skuNameParameterName: name
         });
     }
 
-    onSkuTierUpdated(tier: string) {
+    onSkuTierUpdated(tier: string): void {
         this.setState({
             skuTier: tier
         });
     }
 
-    onSkuTierParameterNameUpdated(name: string) {
+    onSkuTierParameterNameUpdated(name: string): void {
         this.setState({
             skuTierParameterName: name
         });

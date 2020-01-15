@@ -71,7 +71,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         return state;
     }
 
-    componentDidUpdate(prevProps: ParameterFormProps) {
+    componentDidUpdate(prevProps: ParameterFormProps): void {
         if(this.props.name === prevProps.name) {
             return;
         }
@@ -176,7 +176,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         this.props.onSubmit(parameter, this.state.name);
     }
 
-    render() {
+    render(): JSX.Element {
         let defaultValueType: string;
 
         switch(this.state.type) {

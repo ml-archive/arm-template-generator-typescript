@@ -28,7 +28,7 @@ export class Select extends Component<SelectProps, SelectState> {
         this.state = state;
     }
 
-    componentDidUpdate(prevProps: SelectProps) {
+    componentDidUpdate(prevProps: SelectProps): void {
         if(prevProps.value === this.props.value) {
             return;
         }
@@ -38,7 +38,7 @@ export class Select extends Component<SelectProps, SelectState> {
         });
     }
 
-    onOptionSelected (event: ChangeEvent<HTMLSelectElement>) {
+    onOptionSelected (event: ChangeEvent<HTMLSelectElement>): void {
         const value = event.currentTarget.value;
 
         this.setState({
@@ -50,7 +50,7 @@ export class Select extends Component<SelectProps, SelectState> {
         }
     }
 
-    render() {
+    render(): JSX.Element {
         return (<select required={this.props.required} id={this.props.id} className="form-control" onChange={this.onOptionSelected} value={this.state.selectedValue}>
             {!this.props.hideEmpty && <option></option>}
             {this.props.values.map((value) => {

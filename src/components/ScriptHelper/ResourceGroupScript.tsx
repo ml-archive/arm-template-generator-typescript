@@ -22,7 +22,7 @@ export class ResourceGroupScript extends Component<ResourceGroupScriptProps, Res
         this.state = state;
     }
 
-    onChange(option: string) {
+    onChange(option: string): void {
         if(option.length > 0) {
             this.props.onChange("resourceGroup()." + option)
         } else {
@@ -34,7 +34,7 @@ export class ResourceGroupScript extends Component<ResourceGroupScriptProps, Res
         });
     }
 
-    render() {
+    render(): JSX.Element {
         const options = ["id", "name", "type", "location", "managedBy"];
 
         return <div className="input-group">

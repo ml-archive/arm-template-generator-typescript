@@ -22,7 +22,7 @@ export class ParametersVariablesScript extends Component<ParametersVariablesScri
         this.parameterChosen = this.parameterChosen.bind(this);
     }
 
-    parameterChosen(parameter: string) {
+    parameterChosen(parameter: string): void {
         const type: string = this.props.type === ParametersVariablesScriptType.Parameters
             ? "parameters"
             : "variables";
@@ -31,7 +31,7 @@ export class ParametersVariablesScript extends Component<ParametersVariablesScri
         this.props.onChange(output);
     }
 
-    render() {
+    render(): JSX.Element {
         const keys: string[] = Object.keys(this.props.type === ParametersVariablesScriptType.Parameters ? this.props.parameters : this.props.variables);
         const label: string = this.props.type === ParametersVariablesScriptType.Parameters ? "Choose a parameter" : "Choose a variable";
 

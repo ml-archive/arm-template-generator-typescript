@@ -16,11 +16,11 @@ export class FileLoader extends Component<FileLoaderProps> {
 
     private fileInput: HTMLInputElement;
 
-    clickFileLoader() {
+    clickFileLoader(): void {
         this.fileInput.click();
     }
 
-    loadFile(event: ChangeEvent<HTMLInputElement>) {
+    loadFile(event: ChangeEvent<HTMLInputElement>): void {
         const reader = new FileReader();
         reader.onload = () => {
             this.props.onFileRead(String(reader.result));
@@ -29,7 +29,7 @@ export class FileLoader extends Component<FileLoaderProps> {
         reader.readAsText(event.currentTarget.files[0]);
     }
 
-    render() {
+    render(): JSX.Element {
     return <Fragment>
         <input ref={fileInput => this.fileInput = fileInput} type="file" className="hidden" onChange={this.loadFile} accept=".json" />
         <button className="btn btn-primary" onClick={this.clickFileLoader}>{this.props.text}</button>

@@ -30,7 +30,7 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
         this.state = state;
     }
 
-    componentDidUpdate(prevProps: ListInputProps) {
+    componentDidUpdate(prevProps: ListInputProps): void {
         if(this.props.type !== prevProps.type) {
             if((this.props.type === "number" && typeof(this.state.value[0]) === "number")
             || this.props.type === "text" && typeof(this.state.value[0]) === "string") {
@@ -74,7 +74,7 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
         this.props.onChange(values);
     }
 
-    updateValue(event: ChangeEvent<HTMLInputElement>, index: number) {
+    updateValue(event: ChangeEvent<HTMLInputElement>, index: number): void {
         let values = this.state.value;
         values[index] = this.props.type === "number" ? Number(event.currentTarget.value) : event.currentTarget.value;
 
@@ -85,7 +85,7 @@ export class ListInput extends Component<ListInputProps, ListInputState> {
         this.props.onChange(values);
     }
 
-    render() {
+    render(): JSX.Element {
         return <Fragment>
             <label>{this.props.label}</label>
             {this.state.value.map((value, index) => {

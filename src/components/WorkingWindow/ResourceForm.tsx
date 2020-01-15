@@ -51,7 +51,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
         return state;
     }
 
-    componentDidUpdate(prevProps: ResourceFormProps) {
+    componentDidUpdate(prevProps: ResourceFormProps): void {
         let prevResource: string, curResource: string;
 
         prevResource = prevProps.resource && prevProps.resource.getName() ? prevProps.resource.getName() : "";
@@ -64,7 +64,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
         this.setState(this.buildState(this.props));
     }
 
-    typeSelected(option: string) {
+    typeSelected(option: string): void {
         if(option === "") {
             this.setState({
                 type: ResourceType.None
@@ -78,7 +78,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
         }
     }
 
-    render() {
+    render(): JSX.Element {
         const types = [
             ResourceType[ResourceType.None],
             ResourceType[ResourceType.StorageAccount],

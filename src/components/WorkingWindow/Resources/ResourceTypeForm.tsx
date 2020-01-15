@@ -82,31 +82,31 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
     abstract getSpecificMarkup(): JSX.Element;
 
-    onNameUpdated(value: string) {
+    onNameUpdated(value: string): void {
         this.setState({
             name: value
         });
     }
 
-    onNameParameterNameUpdated(name: string) {
+    onNameParameterNameUpdated(name: string): void {
         this.setState({
             nameParameterName: name
         });
     }
 
-    onConditionUpdated(value: string) {
+    onConditionUpdated(value: string): void {
         this.setState({
             condition: value
         });
     }
 
-    onDisplayNameUpdated(value: string) {
+    onDisplayNameUpdated(value: string): void {
         this.setState({
             displayName: value
         });
     }
 
-    onSubmit() {
+    onSubmit(): void {
         let resource = this.props.resource ? this.props.resource : this.getNewResource();
 
         resource.setName = this.state.nameParameterName
@@ -198,19 +198,19 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         parameterList[name] = parameter;
     }
 
-    onDependencyUpdated(dependency: ResourceDependency) {
+    onDependencyUpdated(dependency: ResourceDependency): void {
         this.setState({
             dependency: dependency
         });
     }
 
-    onLocationUpdated(location: string) {
+    onLocationUpdated(location: string): void {
         this.setState({
             location: location
         });
     }
 
-    onLocationParameterNameUpdated(name: string) {
+    onLocationParameterNameUpdated(name: string): void {
         this.setState({
             locationParameterName: name
         });

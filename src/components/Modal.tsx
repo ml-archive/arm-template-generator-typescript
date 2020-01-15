@@ -8,9 +8,7 @@ interface ModalProps {
 }
 
 export class Modal extends Component<ModalProps> {
-
-
-    render() {
+    render(): JSX.Element {
         let modalClass = "modal fade";
         if(this.props.show) {
             modalClass += " show";

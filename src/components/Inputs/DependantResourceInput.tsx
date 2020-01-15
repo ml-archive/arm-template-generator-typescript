@@ -46,7 +46,7 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
         this.props.onDependencyUpdated(dependency);
     }
 
-    onResourceSelected(type: string, name: string) {
+    onResourceSelected(type: string, name: string): void {
         let dependency = this.state.dependency;
 
         if(this.props.resources.filter(r => r.type === type).map(r => r.getName()).findIndex(n => n === name) < 0) {
@@ -86,7 +86,7 @@ export class DependantResourceInput extends Component<DependantResourceInputProp
         this.props.onDependencyUpdated(localDependency);
     }
 
-    render() {
+    render(): JSX.Element {
         if(this.props.dependency.required.length <= 0) {
             return null;
         }

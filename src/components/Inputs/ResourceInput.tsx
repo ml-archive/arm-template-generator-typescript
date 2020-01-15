@@ -58,7 +58,7 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         return state;
     }
 
-    componentDidUpdate(prevProps: ResourceInputProps) {
+    componentDidUpdate(prevProps: ResourceInputProps): void {
         if(this.props.value === prevProps.value || this.props.value === this.state.realValue) {
             return;
         }
@@ -92,7 +92,7 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         this.props.onValueUpdated(realValue);
     }
 
-    setVariableName(event: ChangeEvent<HTMLInputElement>) {
+    setVariableName(event: ChangeEvent<HTMLInputElement>): void {
         this.setState({
             variableName: event.currentTarget.value
         });
@@ -100,7 +100,7 @@ export class ResourceInput extends Component<ResourceInputProps, ResourceInputSt
         this.props.onNewParameterNameChanged(event.currentTarget.value);
     }
 
-    render() {
+    render(): JSX.Element {
         let options: string[] = [];
 
         if(this.props.parameters && this.props.parameters.length > 0){
