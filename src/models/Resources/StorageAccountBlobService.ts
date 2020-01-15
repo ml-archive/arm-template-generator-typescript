@@ -43,6 +43,10 @@ export class StorageAccountBlobService extends Resource {
         }
     }
 
+    static needLocation(): boolean {
+        return false;
+    }
+
     getName(): string {
         return this.simpleName;
     }

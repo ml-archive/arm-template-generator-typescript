@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, Fragment } from "react";
 import ArmTemplate from "../../../models/ArmTemplate";
 import Resource, { ResourceTags } from "../../../models/Resource";
 import Parameter from "../../../models/Parameter";
@@ -15,6 +15,7 @@ export interface ResourceTypeFormProps<TResource extends Resource> {
     template: ArmTemplate;
     onSave: (resources: Resource[], parameters: { [index: string]: Parameter }) => ArmTemplate;
     resource?: TResource;
+    showLocation: boolean;
 }
 
 export abstract class ResourceTypeFormState {
@@ -226,10 +227,12 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
                 <input type="text" id="resource-name" value={this.state.name} onChange={(e) => this.onNameUpdated(e.currentTarget.value)} className="form-control" required />
             </ResourceInput>
 
-            <h3>Location*</h3>
-            <ResourceInput id="resource-location" parameters={parameters} variables={variables} value={this.state.location} onValueUpdated={this.onLocationUpdated} onNewParameterNameChanged={this.onLocationParameterNameUpdated}>
-                <Select id="resource-location" required={true} values={Resource.allowedLocations} value={this.state.location} onOptionSelect={this.onLocationUpdated}></Select>
-            </ResourceInput>
+            {this.props.showLocation && <Fragment>
+                <h3>Location*</h3>
+                <ResourceInput id="resource-location" parameters={parameters} variables={variables} value={this.state.location} onValueUpdated={this.onLocationUpdated} onNewParameterNameChanged={this.onLocationParameterNameUpdated}>
+                    <Select id="resource-location" required={true} values={Resource.allowedLocations} value={this.state.location} onOptionSelect={this.onLocationUpdated}></Select>
+                </ResourceInput>
+            </Fragment>}
 
             <h3>Condition (to deploy)</h3>
             <input type="text" id="resource-condition" value={this.state.condition} onChange={(e) => this.onConditionUpdated(e.currentTarget.value)} className="form-control" />
