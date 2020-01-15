@@ -3,6 +3,8 @@ import Resource from "./Resource";
 import Output from "./Output";
 
 export class ArmTemplate {
+    $schema: string = "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#";
+    contentVersion: string = "1.0.0.0";
     parameters: { [index: string]: Parameter };
     variables: { [index: string]: string | object | object[] };
     resources: Resource[];

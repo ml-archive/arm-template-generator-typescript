@@ -47,6 +47,7 @@ export class StorageAccountProperties {
 
 export class StorageAccountEncryption {
     services: StorageAccountEncryptionServices;
+    keySource: string = "Microsoft.Storage";
 }
 
 export class StorageAccountEncryptionServices {
