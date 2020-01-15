@@ -5,6 +5,7 @@ export class StorageAccount extends Resource {
     static displayName: string = "Storage account";
     kind: string;
     properties: StorageAccountProperties;
+    sku: StorageAccountSku;
 
     static allowedKinds:string[] = ["Storage", "StorageV2", "BlobStorage", "FileStorage", "BlockBlobStorage"];
 
@@ -32,6 +33,9 @@ export class StorageAccount extends Resource {
         account.properties.encryption.services.blob.enabled = true;
         account.properties.encryption.services.file = new StorageAccountEncryptionService();
         account.properties.encryption.services.file.enabled = true;
+        account.sku = new StorageAccountSku();
+        account.sku.name = StorageAccountSku.allowedNames[0];
+        account.sku.tier = StorageAccountSku.allowedTiers[0];
 
         return [account];
     }
@@ -57,6 +61,14 @@ export class StorageAccountEncryptionServices {
 
 export class StorageAccountEncryptionService {
     enabled: boolean | string;
+}
+
+export class StorageAccountSku {
+    name: string;
+    tier: string;
+
+    static allowedNames: string[] = ["Standard_LRS", "Standard_ZRS", "Standard_GRS", "Standard_RAGRS", "Premium_LRS"];
+    static allowedTiers: string[] = ["Standard", "Premium"];
 }
 
 export default StorageAccount;
