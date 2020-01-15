@@ -15,6 +15,10 @@ export abstract class Resource {
         this.apiVersion = "2019-04-01";
     }
 
+    static needLocation(): boolean {
+        return true;
+    }
+
     getName(): string {
         return this.name;
     }

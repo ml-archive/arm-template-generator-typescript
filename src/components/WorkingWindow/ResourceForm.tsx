@@ -94,9 +94,9 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
                 <Select onOptionSelect={this.typeSelected} hideEmpty={true} value={value} values={types}></Select>
             </div>
 
-            {this.state.type === ResourceType.StorageAccount && <StorageAccountForm template={this.props.template} resource={this.props.resource as StorageAccount} onSave={this.props.onSubmit}></StorageAccountForm>}
-            {this.state.type === ResourceType.StorageAccountBlobService && <StorageAccountBlobServiceForm template={this.props.template} resource={this.props.resource as StorageAccountBlobService} onSave={this.props.onSubmit}></StorageAccountBlobServiceForm>}
-            {this.state.type === ResourceType.StorageAccountBlobContainer && <StorageAccountBlobContainerForm template={this.props.template} resource={this.props.resource as StorageAccountBlobContainer} onSave={this.props.onSubmit}></StorageAccountBlobContainerForm>}
+            {this.state.type === ResourceType.StorageAccount && <StorageAccountForm template={this.props.template} resource={this.props.resource as StorageAccount} onSave={this.props.onSubmit} showLocation={StorageAccount.needLocation()}></StorageAccountForm>}
+            {this.state.type === ResourceType.StorageAccountBlobService && <StorageAccountBlobServiceForm template={this.props.template} resource={this.props.resource as StorageAccountBlobService} onSave={this.props.onSubmit} showLocation={StorageAccountBlobService.needLocation()}></StorageAccountBlobServiceForm>}
+            {this.state.type === ResourceType.StorageAccountBlobContainer && <StorageAccountBlobContainerForm template={this.props.template} resource={this.props.resource as StorageAccountBlobContainer} onSave={this.props.onSubmit} showLocation={StorageAccountBlobContainer.needLocation()}></StorageAccountBlobContainerForm>}
         </Fragment>
     }
 }

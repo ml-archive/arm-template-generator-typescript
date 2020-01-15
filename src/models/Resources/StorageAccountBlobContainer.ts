@@ -18,6 +18,10 @@ export class StorageAccountBlobContainer extends Resource {
         return this.getResourceIdString(this.requiredService.getName(), "/", this.getName());
     }
 
+    static needLocation(): boolean {
+        return false;
+    }
+
     setDependantResources(allResources: Resource[]): void {
         if(!this.dependsOn || this.dependsOn.length <= 0) {
             return;
