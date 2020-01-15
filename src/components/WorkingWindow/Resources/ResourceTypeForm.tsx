@@ -21,6 +21,7 @@ export abstract class ResourceTypeFormState {
     name: string;
     nameParameterName: string;
     location: string;
+    locationParameterName: string;
     condition: string;
     displayName: string;
     dependency: ResourceDependency;
@@ -38,10 +39,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         this.onConditionUpdated = this.onConditionUpdated.bind(this);
         this.onDependencyUpdated = this.onDependencyUpdated.bind(this);
         this.onLocationUpdated = this.onLocationUpdated.bind(this);
+        this.onLocationParameterNameUpdated = this.onLocationParameterNameUpdated.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
-
-        this.getBaseParametersToCreate = this.getBaseParametersToCreate.bind(this);
     }
 
     abstract getDependencies(): ResourceDependency;
@@ -55,6 +55,7 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         state.condition = "";
         state.displayName = "";
         state.location = "";
+        state.locationParameterName = "";
 
         if(props.resource) {
             if(props.resource.name) {
@@ -133,6 +134,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
         this.createParameter(this.state.nameParameterName, this.state.name, "string", [], parametersToCreate);
 
+        this.createParameter(this.state.locationParameterName, this.state.location, "string", [], parametersToCreate);
+
         let resources = [resource];
 
         let existingResources = this.buildRequiredResources(this.state.dependency);
@@ -176,14 +179,6 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         return "[parameters('" + parameterName + "')]";
     }
 
-    protected getBaseParametersToCreate(): { [index: string]: Parameter } {
-        var parametersToCreate: { [index: string]: Parameter } = {}
-
-        this.createParameter(this.state.nameParameterName, this.state.name, "string", [], parametersToCreate);
-
-        return parametersToCreate;
-    }
-
     protected createParameter(name: string, defaultValue: boolean | number | string, type: string, allowedValues: number[] | string[], parameterList: { [index: string]: Parameter }): void {
         if(!name) {
             return null;
@@ -213,12 +208,15 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         });
     }
 
+    onLocationParameterNameUpdated(name: string) {
+        this.setState({
+            locationParameterName: name
+        });
+    }
+
     render(): JSX.Element {
         const parameters = Object.keys(this.props.template.parameters);
         const variables = Object.keys(this.props.template.variables);
-
-        let locations = parameters;
-        locations.unshift("[resourceGroup().location]");
 
         return <form onSubmit={this.onSubmit}>
             <h3>Name*</h3>
@@ -227,7 +225,9 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
             </ResourceInput>
 
             <h3>Location*</h3>
-            <Select id="resource-location" required={true} values={locations} value={this.state.location} onOptionSelect={this.onLocationUpdated}></Select>
+            <ResourceInput id="resource-location" parameters={parameters} variables={variables} value={this.state.location} onValueUpdated={this.onLocationUpdated} onNewParameterNameChanged={this.onLocationParameterNameUpdated}>
+                <Select id="resource-location" required={true} values={Resource.allowedLocations} value={this.state.location} onOptionSelect={this.onLocationUpdated}></Select>
+            </ResourceInput>
 
             <h3>Condition (to deploy)</h3>
             <input type="text" id="resource-condition" value={this.state.condition} onChange={(e) => this.onConditionUpdated(e.currentTarget.value)} className="form-control" />

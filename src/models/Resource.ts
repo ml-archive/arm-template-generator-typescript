@@ -64,6 +64,8 @@ export abstract class Resource {
         return [];
     }
 
+    static allowedLocations: string[] = ["[resourceGroup().location]"];
+
     //Nothing to do in the base case
     setDependencies(_dependency: ResourceDependency, _resources: Resource[]): void {
         this.dependsOn = [];
