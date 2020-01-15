@@ -23,6 +23,7 @@ export class StorageAccount extends Resource {
         let account = new StorageAccount();
 
         account.name = name;
+        account.location = Resource.allowedLocations[0];
         account.kind = "StorageV2";
         account.properties = new StorageAccountProperties();
         account.properties.accessTier = "Cool";
