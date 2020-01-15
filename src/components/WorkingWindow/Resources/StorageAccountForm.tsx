@@ -1,5 +1,5 @@
 import { ResourceTypeForm, ResourceTypeFormState, ResourceTypeFormProps } from "./ResourceTypeForm";
-import StorageAccount, { StorageAccountProperties, StorageAccountEncryption, StorageAccountEncryptionServices, StorageAccountEncryptionService } from "../../../models/Resources/StorageAccount";
+import StorageAccount, { StorageAccountProperties, StorageAccountEncryption, StorageAccountEncryptionServices, StorageAccountEncryptionService, StorageAccountSku } from "../../../models/Resources/StorageAccount";
 import { Fragment } from "react";
 import React = require("react");
 import Select from "../../Inputs/Select";
@@ -21,6 +21,10 @@ class StorageAccountFormState extends ResourceTypeFormState {
     fileEncryption: boolean | string;
     fileEncryptionString: string;
     fileEncryptionParameterName: string;
+    skuName: string;
+    skuNameParameterName: string;
+    skuTier: string;
+    skuTierParameterName: string;
 }
 
 export class StorageAccountForm extends ResourceTypeForm<StorageAccount, StorageAccountFormState> {
@@ -49,6 +53,10 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         this.onBlobEncryptionParameterNameUpdated = this.onBlobEncryptionParameterNameUpdated.bind(this);
         this.onFileEncryptionUpdated = this.onFileEncryptionUpdated.bind(this);
         this.onFileEncryptionParameterNameUpdated = this.onFileEncryptionParameterNameUpdated.bind(this);
+        this.onSkuNameUpdated = this.onSkuNameUpdated.bind(this);
+        this.onSkuNameParameterNameUpdated = this.onSkuNameParameterNameUpdated.bind(this);
+        this.onSkuTierUpdated = this.onSkuTierUpdated.bind(this);
+        this.onSkuTierParameterNameUpdated = this.onSkuTierParameterNameUpdated.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
@@ -66,6 +74,10 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         state.fileEncryption = false;
         state.fileEncryptionString = "";
         state.fileEncryptionParameterName = "";
+        state.skuName = "";
+        state.skuNameParameterName = "";
+        state.skuTier = "";
+        state.skuTierParameterName = "";
 
         if(props.resource) {
             if(props.resource.kind) {
@@ -92,6 +104,16 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
                         state.fileEncryption = props.resource.properties.encryption.services.file.enabled;
                         state.fileEncryptionString = String(props.resource.properties.encryption.services.file.enabled);
                     }
+                }
+            }
+
+            if(props.resource.sku) {
+                if(props.resource.sku.name) {
+                    state.skuName = props.resource.sku.name;
+                }
+
+                if(props.resource.sku.tier) {
+                    state.skuTier = props.resource.sku.tier;
                 }
             }
         }
@@ -162,6 +184,30 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         });
     }
 
+    onSkuNameUpdated(name: string) {
+        this.setState({
+            skuName: name
+        });
+    }
+
+    onSkuNameParameterNameUpdated(name: string) {
+        this.setState({
+            skuNameParameterName: name
+        });
+    }
+
+    onSkuTierUpdated(tier: string) {
+        this.setState({
+            skuTier: tier
+        });
+    }
+
+    onSkuTierParameterNameUpdated(name: string) {
+        this.setState({
+            skuTierParameterName: name
+        });
+    }
+
     protected setSpecificInformation(resource: StorageAccount): void {
         resource.kind = this.state.kindParameterName 
             ? this.getParameterString(this.state.kindParameterName)
@@ -204,6 +250,18 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         resource.properties.encryption.services.file.enabled = this.state.fileEncryptionParameterName
             ? this.getParameterString(this.state.fileEncryptionParameterName)
             : this.state.fileEncryption;
+
+        if(!resource.sku) {
+            resource.sku = new StorageAccountSku();
+        }
+
+        resource.sku.name = this.state.skuNameParameterName
+            ? this.getParameterString(this.state.skuNameParameterName)
+            : this.state.skuName;
+
+        resource.sku.tier = this.state.skuTierParameterName
+            ? this.getParameterString(this.state.skuTierParameterName)
+            : this.state.skuTier;
     }
 
     protected getSpecificNewParameters(): { [index: string]: Parameter; } {
@@ -218,6 +276,10 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
         this.createParameter(this.state.blobEncryptionParameterName, this.state.blobEncryption, "boolean", [], parametersToCreate);
 
         this.createParameter(this.state.fileEncryptionParameterName, this.state.fileEncryption, "boolean", [], parametersToCreate);
+
+        this.createParameter(this.state.skuNameParameterName, this.state.skuName, "string", StorageAccountSku.allowedNames, parametersToCreate);
+
+        this.createParameter(this.state.skuTierParameterName, this.state.skuTier, "string", StorageAccountSku.allowedTiers, parametersToCreate);
 
         return parametersToCreate;
     }
@@ -234,6 +296,16 @@ export class StorageAccountForm extends ResourceTypeForm<StorageAccount, Storage
             <h3>Kind*</h3>
             <ResourceInput id="resource-kind" value={this.state.kind} parameters={parameters} variables={variables} onValueUpdated={this.onKindSelected} onNewParameterNameChanged={this.onKindParameterNameUpdated}>
                 <Select id="resource-kind" required={true} value={this.state.kind} values={StorageAccount.allowedKinds} onOptionSelect={this.onKindSelected}></Select>
+            </ResourceInput>
+
+            <h3>Account Type*</h3>
+            <ResourceInput id="resource-sku-name" value={this.state.skuName} parameters={parameters} variables={variables} onValueUpdated={this.onSkuNameUpdated} onNewParameterNameChanged={this.onSkuNameParameterNameUpdated}>
+                <Select id="resource-sku-name" required={true} value={this.state.skuName} values={StorageAccountSku.allowedNames} onOptionSelect={this.onSkuNameUpdated}></Select>
+            </ResourceInput>
+
+            <h3>Account Tier*</h3>
+            <ResourceInput id="resource-sku-tier" value={this.state.skuTier} parameters={parameters} variables={variables} onValueUpdated={this.onSkuTierUpdated} onNewParameterNameChanged={this.onSkuTierParameterNameUpdated}>
+                <Select id="resource-sku-tier" required={true} value={this.state.skuTier} values={StorageAccountSku.allowedTiers} onOptionSelect={this.onSkuTierUpdated}></Select>
             </ResourceInput>
 
             <h3>Access tier</h3>

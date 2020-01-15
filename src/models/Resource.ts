@@ -4,6 +4,7 @@ export abstract class Resource {
     condition: string;
     type: string;
     name: string;
+    location: string;
     apiVersion: string;
     tags: ResourceTags;
     dependsOn: string[];
@@ -62,6 +63,8 @@ export abstract class Resource {
     static getAllRequiredResources(): ResourceDependency[] {
         return [];
     }
+
+    static allowedLocations: string[] = ["[resourceGroup().location]"];
 
     //Nothing to do in the base case
     setDependencies(_dependency: ResourceDependency, _resources: Resource[]): void {
