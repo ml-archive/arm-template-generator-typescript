@@ -20,7 +20,7 @@
   "homepage": "https://github.com/nodes-projects/nodes-arm-template-generator-react#readme",
   "devDependencies": {
     "@types/bootstrap": "^4.3.1",
-    "@types/react": "^16.9.13",
+    "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.2.0",
@@ -29,8 +29,8 @@
     "node-sass": "^4.13.0",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
