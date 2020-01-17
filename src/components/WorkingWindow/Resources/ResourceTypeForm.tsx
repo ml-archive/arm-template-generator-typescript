@@ -221,6 +221,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
         const parameters = Object.keys(this.props.template.parameters);
         const variables = Object.keys(this.props.template.variables);
 
+        const submitText = this.props.resource ? "Save" : "Add";
+
         return <form onSubmit={this.onSubmit}>
             <h3>Name*</h3>
             <ResourceInput id="resource-name" parameters={parameters} variables={variables} value={this.state.name} onValueUpdated={this.onNameUpdated} onNewParameterNameChanged={this.onNameParameterNameUpdated}>
@@ -244,8 +246,8 @@ export abstract class ResourceTypeForm<TResource extends Resource, TState extend
 
             <DependantResourceInput headline="Dependencies" resources={this.props.template.resources} currentResource={this.props.resource} dependency={this.state.dependency} onDependencyUpdated={this.onDependencyUpdated}></DependantResourceInput>
 
-            <div className="input-group">
-                <button type="submit" className="btn btn-primary">Save</button>
+            <div className="input-group submit-group">
+            <button type="submit" className="btn btn-primary">{submitText}</button>
             </div>
         </form>
     }
