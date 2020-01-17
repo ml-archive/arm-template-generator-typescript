@@ -59,7 +59,7 @@ export class StorageAccountBlobContainerForm extends ResourceTypeForm<StorageAcc
         let variables = Object.keys(this.props.template.variables);
 
         return <Fragment>
-            <label htmlFor="resource-public-access">Public access*</label>
+            <h3>Public access*</h3>
             <ResourceInput id="resource-public-access" parameters={parameters} variables={variables} value={this.state.access} onValueUpdated={this.onAccessUpdated} onNewParameterNameChanged={this.onAccessParameterNameChanged}>
                 <Select hideEmpty={true} id="resource-public-access" onOptionSelect={this.onAccessUpdated} required={true} value={this.state.access} values={StorageAccountBlobContainerProperties.allowedPublicAccesses}></Select>
             </ResourceInput>
