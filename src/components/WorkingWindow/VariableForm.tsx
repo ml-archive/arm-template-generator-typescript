@@ -115,7 +115,7 @@ export class VariableForm extends Component<VariableFormProps, VariableFormState
                 <input type="text" className="form-control" required id="variable-value" value={this.state.value} onChange={this.setValue} />
             </div>
 
-            <div className="input-group">
+            <div className="input-group submit-group">
                 <button type="submit" className="btn btn-primary" onClick={this.submitForm}>{submitText}</button>
             </div>
         </form>

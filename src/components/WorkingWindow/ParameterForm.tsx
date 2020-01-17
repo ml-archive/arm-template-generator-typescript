@@ -195,6 +195,7 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
         }
 
         const allowedValuesType = this.state.type === "int" ? "number" : "text";
+        const submitText = this.props.name ? "Save" : "Add";
 
         let defaultValue: string | number | boolean = null;
         let minValue: number = null;
@@ -255,8 +256,8 @@ export class ParameterForm extends Component<ParameterFormProps, ParameterFormSt
                 {(this.state.type === "string" || this.state.type === "securestring" || this.state.type === "int") &&
                 <ListInput initialValue={allowedValues} label="Allowed values" onChange={this.setAllowedValues} type={allowedValuesType}></ListInput>}
 
-                <div className="input-group">
-                    <button type="submit" className="btn btn-primary">Save</button>
+                <div className="input-group submit-group">
+                    <button type="submit" className="btn btn-primary">{submitText}</button>
                 </div>
             </form>);
     }
