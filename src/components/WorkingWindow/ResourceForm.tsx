@@ -10,6 +10,8 @@ import StorageAccountBlobServiceForm from "./Resources/StorageAccountBlobService
 import StorageAccountBlobService from "../../models/Resources/StorageAccountBlobService";
 import StorageAccountBlobContainer from "../../models/Resources/StorageAccountBlobContainer";
 import StorageAccountBlobContainerForm from "./Resources/StorageAccountBlobContainerForm";
+import ApplicationInsights from "../../models/Resources/ApplicationInsights";
+import ApplicationInsightsForm from "./Resources/ApplicationInsightsForm";
 
 interface ResourceFormProps {
     template: ArmTemplate;
@@ -36,6 +38,9 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
 
         if(props.resource) {
             switch(props.resource.type) {
+                case ApplicationInsights.resourceType:
+                    state.type = ResourceType.ApplicationInsights;
+                    break;
                 case StorageAccount.resourceType:
                     state.type = ResourceType.StorageAccount;
                     break;
@@ -79,8 +84,9 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
     }
 
     render(): JSX.Element {
-        const types = [
+        const types: string[] = [
             ResourceType[ResourceType.None],
+            ResourceType[ResourceType.ApplicationInsights],
             ResourceType[ResourceType.StorageAccount],
             ResourceType[ResourceType.StorageAccountBlobService],
             ResourceType[ResourceType.StorageAccountBlobContainer]
@@ -94,6 +100,7 @@ export class ResourceForm extends Component<ResourceFormProps, ResourceFormState
                 <Select onOptionSelect={this.typeSelected} hideEmpty={true} value={value} values={types}></Select>
             </div>
 
+            {this.state.type === ResourceType.ApplicationInsights && <ApplicationInsightsForm template={this.props.template} resource={this.props.resource as ApplicationInsights} onSave={this.props.onSubmit} showLocation={ApplicationInsights.needLocation()}></ApplicationInsightsForm>}
             {this.state.type === ResourceType.StorageAccount && <StorageAccountForm template={this.props.template} resource={this.props.resource as StorageAccount} onSave={this.props.onSubmit} showLocation={StorageAccount.needLocation()}></StorageAccountForm>}
             {this.state.type === ResourceType.StorageAccountBlobService && <StorageAccountBlobServiceForm template={this.props.template} resource={this.props.resource as StorageAccountBlobService} onSave={this.props.onSubmit} showLocation={StorageAccountBlobService.needLocation()}></StorageAccountBlobServiceForm>}
             {this.state.type === ResourceType.StorageAccountBlobContainer && <StorageAccountBlobContainerForm template={this.props.template} resource={this.props.resource as StorageAccountBlobContainer} onSave={this.props.onSubmit} showLocation={StorageAccountBlobContainer.needLocation()}></StorageAccountBlobContainerForm>}
