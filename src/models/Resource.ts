@@ -78,6 +78,7 @@ export abstract class Resource {
 
 export enum ResourceType {
     None,
+    ApplicationInsights,
     StorageAccount,
     StorageAccountBlobService,
     StorageAccountBlobContainer
