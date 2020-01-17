@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import React = require("react");
 import ResourceInput from "../../Inputs/ResourceInput";
 import Select from "../../Inputs/Select";
+import ResourceDependency from "../../../models/Resources/ResourceDependency";
 
 class ApplicationInsightsFormState extends ResourceTypeFormState {
     kind: string;
@@ -50,7 +51,7 @@ export class ApplicationInsightsForm extends ResourceTypeForm<ApplicationInsight
         return new ApplicationInsights();
     }
 
-    getDependencies(): import("../../../models/Resources/ResourceDependency").ResourceDependency {
+    getDependencies(): ResourceDependency {
         return ApplicationInsights.getResourceDependencyModel();
     }
 
